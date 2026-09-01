@@ -1,39 +1,296 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Admin Login - Student Marks Analysis</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body class="login-bg d-flex align-items-center justify-content-center vh-100">
-    <div class="card p-4 shadow text-center" style="width: 400px; background: rgba(255, 255, 255, 0.9);">
+<html lang="en">
 
-        <!-- Centered College Logo -->
-        <div class="text-center mb-2">
-            <img src="{{ url_for('static', filename='logo.png') }}" 
-                 alt="College Logo" 
-                 style="width: 100px; height: 100px; object-fit: contain; display: block; margin: 0 auto 10px auto;">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Login | StudentAnalytics</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+<div class="login-page">
+
+
+    <!-- =====================================================
+         TOP BRAND
+         ===================================================== -->
+
+    <header class="login-brand">
+
+        <img
+            src="{{ url_for('static', filename='logo.png') }}"
+            class="login-brand-icon"
+            alt="College Logo"
+        >
+
+        <div class="login-brand-name">
+            Student<span>Analytics</span>
         </div>
 
-        <h3 class="mb-3">🔐 Admin Login</h3>
+    </header>
 
-        {% if error %}
-            <div class="alert alert-danger">{{ error }}</div>
-        {% endif %}
 
-        <form method="POST">
-            <div class="mb-3 text-start">
-                <label>Username</label>
-                <input type="text" name="username" class="form-control" required>
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <main class="login-main">
+
+
+        <!-- =================================================
+             LEFT SIDE
+             ================================================= -->
+
+        <section class="login-intro">
+
+            <div class="quote-line"></div>
+
+            <h1>
+                Beyond Marks —
+                <br>
+                Discover
+                <span>Performance.</span>
+            </h1>
+
+            <p>
+                Transforming student results into
+                meaningful academic insights.
+            </p>
+
+            <p class="tagline">
+                Analyze. Understand. Improve.
+            </p>
+
+        </section>
+
+
+
+        <!-- =================================================
+             RIGHT SIDE LOGIN
+             ================================================= -->
+
+        <section class="login-card">
+
+
+            <!-- College Logo -->
+
+            <div class="login-logo-wrapper">
+
+                <img
+                    src="{{ url_for('static', filename='logo.png') }}"
+                    class="login-logo"
+                    alt="College Logo"
+                >
+
             </div>
 
-            <div class="mb-3 text-start">
-                <label>Password</label>
-                <input type="password" name="password" class="form-control" required>
+
+
+            <!-- Title -->
+
+            <h2 class="login-title">
+                Student<span>Analytics</span>
+            </h2>
+
+            <p class="login-subtitle">
+                Student Result Analysis System
+            </p>
+
+
+
+            <!-- Secure Login -->
+
+            <div class="secure-title">
+
+                <span class="secure-icon">
+                    🛡
+                </span>
+
+                Secure Login
+
             </div>
 
-            <button type="submit" class="btn btn-primary w-100">Login</button>
-        </form>
-    </div>
+
+
+            <!-- Error -->
+
+            {% if error %}
+
+            <div class="login-error">
+                {{ error }}
+            </div>
+
+            {% endif %}
+
+
+
+            <!-- Login Form -->
+
+            <form method="POST">
+
+
+                <!-- Username -->
+
+                <div class="login-form-group">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <div class="login-input-wrapper">
+
+                        <span class="input-icon">
+                            👤
+                        </span>
+
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            class="login-input"
+                            placeholder="Enter username"
+                            autocomplete="username"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Password -->
+
+                <div class="login-form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="login-input-wrapper">
+
+                        <span class="input-icon">
+                            🔒
+                        </span>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="login-input"
+                            placeholder="Enter password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            id="passwordToggle"
+                            aria-label="Show password"
+                        >
+                            👁
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Login -->
+
+                <button
+                    type="submit"
+                    class="login-button"
+                >
+                    ➜ &nbsp; Login
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="login-footer">
+
+        <strong>
+            Student Result Analysis System
+        </strong>
+
+        <br>
+
+        Built with Flask • Pandas • Plotly
+
+    </footer>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     PASSWORD SHOW / HIDE
+     ========================================================= -->
+
+<script>
+
+const passwordInput =
+    document.getElementById("password");
+
+const passwordToggle =
+    document.getElementById("passwordToggle");
+
+
+passwordToggle.addEventListener("click", function () {
+
+    if (passwordInput.type === "password") {
+
+        passwordInput.type = "text";
+
+        passwordToggle.textContent = "🙈";
+
+        passwordToggle.setAttribute(
+            "aria-label",
+            "Hide password"
+        );
+
+    } else {
+
+        passwordInput.type = "password";
+
+        passwordToggle.textContent = "👁";
+
+        passwordToggle.setAttribute(
+            "aria-label",
+            "Show password"
+        );
+
+    }
+
+});
+
+</script>
+
+
 </body>
+
 </html>
