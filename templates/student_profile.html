@@ -1,3 +1,4 @@
+{% from "icons.html" import icon %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -85,7 +86,7 @@
 
             <h2>
 
-                👨‍🎓 Student Profile
+                {{ icon("cap", 28) }} Student Profile
 
             </h2>
 
@@ -135,7 +136,7 @@
 
                     <h2>
 
-                        🏆 {{ student.Rank }}
+                        {{ icon("trophy", 22) }} {{ student.Rank }}
 
                     </h2>
 
@@ -199,7 +200,7 @@
 
                 <h5>
 
-                    💪 Strongest Subject
+                    {{ icon("zap", 18) }} Strongest Subject
 
                 </h5>
 
@@ -226,7 +227,7 @@
 
                 <h5>
 
-                    ⚠️ Subject Needing Improvement
+                    {{ icon("alert-triangle", 18) }} Subject Needing Improvement
 
                 </h5>
 
@@ -258,7 +259,7 @@
 
             <h4 class="mb-3">
 
-                📚 Subject-wise Performance
+                {{ icon("book", 20) }} Subject-wise Performance
 
             </h4>
 

@@ -1,18 +1,11 @@
+{% from "icons.html" import icon %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        Student Analytics Dashboard
-    </title>
+    <title>StudentAnalytics | Dashboard</title>
 
     <!-- Bootstrap -->
     <link
@@ -26,1050 +19,429 @@
         rel="stylesheet"
     >
 
-    <style>
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-
-            margin: 0;
-
-            font-family:
-                'Inter',
-                sans-serif;
-
-            background:
-                radial-gradient(
-                    circle at top left,
-                    #1e293b,
-                    transparent 35%
-                ),
-
-                radial-gradient(
-                    circle at bottom right,
-                    #172554,
-                    transparent 35%
-                ),
-
-                #020617;
-
-            color: #e5e7eb;
-
-            min-height: 100vh;
-        }
-
-        /* ==================================================
-           NAVBAR
-        ================================================== */
-
-        .navbar-custom {
-
-            background:
-                rgba(
-                    15,
-                    23,
-                    42,
-                    0.85
-                );
-
-            backdrop-filter:
-                blur(18px);
-
-            border-bottom:
-                1px solid
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.08
-                );
-
-            padding:
-                18px 35px;
-
-            position:
-                sticky;
-
-            top: 0;
-
-            z-index: 1000;
-        }
-
-        .brand {
-
-            font-size: 22px;
-
-            font-weight: 800;
-
-            color: white;
-        }
-
-        .brand span {
-
-            color:
-                #60a5fa;
-        }
-
-        .logout-btn {
-
-            background:
-                rgba(
-                    239,
-                    68,
-                    68,
-                    0.12
-                );
-
-            color:
-                #f87171;
-
-            border:
-                1px solid
-                rgba(
-                    239,
-                    68,
-                    68,
-                    0.25
-                );
-
-            padding:
-                9px 18px;
-
-            border-radius:
-                10px;
-
-            text-decoration:
-                none;
-
-            font-weight:
-                600;
-
-            transition:
-                0.3s;
-        }
-
-        .logout-btn:hover {
-
-            background:
-                #ef4444;
-
-            color:
-                white;
-
-            transform:
-                translateY(-2px);
-        }
-
-        /* ==================================================
-           MAIN
-        ================================================== */
-
-        .dashboard {
-
-            max-width:
-                1450px;
-
-            margin:
-                auto;
-
-            padding:
-                45px 25px;
-        }
-
-        .welcome {
-
-            margin-bottom:
-                35px;
-        }
-
-        .welcome h1 {
-
-            font-size:
-                36px;
-
-            font-weight:
-                800;
-
-            color:
-                white;
-
-            margin-bottom:
-                8px;
-        }
-
-        .welcome p {
-
-            color:
-                #94a3b8;
-
-            font-size:
-                15px;
-        }
-
-        /* ==================================================
-           UPLOAD
-        ================================================== */
-
-        .upload-card {
-
-            background:
-                rgba(
-                    15,
-                    23,
-                    42,
-                    0.72
-                );
-
-            border:
-                1px solid
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.08
-                );
-
-            border-radius:
-                20px;
-
-            padding:
-                25px;
-
-            margin-bottom:
-                35px;
-
-            backdrop-filter:
-                blur(18px);
-
-            box-shadow:
-                0 20px 60px
-                rgba(
-                    0,
-                    0,
-                    0,
-                    0.25
-                );
-        }
-
-        .upload-title {
-
-            font-weight:
-                700;
-
-            color:
-                white;
-
-            margin-bottom:
-                18px;
-        }
-
-        .form-control,
-        .form-select {
-
-            background:
-                #0f172a;
-
-            border:
-                1px solid
-                #334155;
-
-            color:
-                #cbd5e1;
-
-            border-radius:
-                10px;
-
-            padding:
-                12px;
-        }
-
-        .form-control:focus,
-        .form-select:focus {
-
-            background:
-                #0f172a;
-
-            color:
-                white;
-
-            border-color:
-                #3b82f6;
-
-            box-shadow:
-                0 0 0 3px
-                rgba(
-                    59,
-                    130,
-                    246,
-                    0.15
-                );
-        }
-
-        .upload-btn {
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #2563eb,
-                    #3b82f6
-                );
-
-            border:
-                none;
-
-            border-radius:
-                10px;
-
-            padding:
-                12px 22px;
-
-            font-weight:
-                700;
-
-            color:
-                white;
-
-            transition:
-                0.3s;
-        }
-
-        .upload-btn:hover {
-
-            transform:
-                translateY(-2px);
-
-            box-shadow:
-                0 10px 25px
-                rgba(
-                    37,
-                    99,
-                    235,
-                    0.3
-                );
-        }
-
-        /* ==================================================
-           ERROR
-        ================================================== */
-
-        .alert-danger {
-
-            background:
-                rgba(
-                    239,
-                    68,
-                    68,
-                    0.12
-                );
-
-            border:
-                1px solid
-                rgba(
-                    239,
-                    68,
-                    68,
-                    0.25
-                );
-
-            color:
-                #fca5a5;
-
-            border-radius:
-                12px;
-        }
-
-        /* ==================================================
-           FILTERS
-        ================================================== */
-
-        .filter-card {
-
-            background:
-                rgba(
-                    15,
-                    23,
-                    42,
-                    0.72
-                );
-
-            border:
-                1px solid
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.08
-                );
-
-            border-radius:
-                18px;
-
-            padding:
-                22px;
-
-            margin-bottom:
-                35px;
-        }
-
-        .filter-title {
-
-            color:
-                white;
-
-            font-weight:
-                800;
-
-            margin-bottom:
-                18px;
-        }
-
-        .filter-label {
-
-            color:
-                #94a3b8;
-
-            font-size:
-                12px;
-
-            font-weight:
-                600;
-
-            margin-bottom:
-                7px;
-        }
-
-        .filter-btn {
-
-            background:
-                #2563eb;
-
-            border:
-                none;
-
-            color:
-                white;
-
-            font-weight:
-                700;
-
-            border-radius:
-                10px;
-
-            padding:
-                11px 20px;
-        }
-
-        .reset-btn {
-
-            background:
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.06
-                );
-
-            border:
-                1px solid
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.1
-                );
-
-            color:
-                #cbd5e1;
-
-            border-radius:
-                10px;
-
-            padding:
-                11px 20px;
-
-            text-decoration:
-                none;
-        }
-
-        /* ==================================================
-           SECTION
-        ================================================== */
-
-        .section-title {
-
-            font-size:
-                20px;
-
-            font-weight:
-                800;
-
-            color:
-                white;
-
-            margin-bottom:
-                20px;
-
-            margin-top:
-                35px;
-        }
-
-        .section-title span {
-
-            color:
-                #60a5fa;
-        }
-
-        /* ==================================================
-           KPI
-        ================================================== */
-
-        .kpi-grid {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                repeat(5, 1fr);
-
-            gap:
-                20px;
-
-            margin-bottom:
-                35px;
-        }
-
-        .kpi-card {
-
-            background:
-                rgba(
-                    15,
-                    23,
-                    42,
-                    0.72
-                );
-
-            border:
-                1px solid
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.08
-                );
-
-            border-radius:
-                18px;
-
-            padding:
-                24px;
-
-            transition:
-                0.3s;
-        }
-
-        .kpi-card:hover {
-
-            transform:
-                translateY(-5px);
-
-            border-color:
-                rgba(
-                    96,
-                    165,
-                    250,
-                    0.35
-                );
-
-            box-shadow:
-                0 15px 40px
-                rgba(
-                    0,
-                    0,
-                    0,
-                    0.25
-                );
-        }
-
-        .kpi-icon {
-
-            font-size:
-                25px;
-
-            margin-bottom:
-                15px;
-        }
-
-        .kpi-label {
-
-            color:
-                #94a3b8;
-
-            font-size:
-                12px;
-
-            font-weight:
-                600;
-        }
-
-        .kpi-value {
-
-            color:
-                white;
-
-            font-size:
-                27px;
-
-            font-weight:
-                800;
-
-            margin-top:
-                5px;
-        }
-
-        /* ==================================================
-           TABLE
-        ================================================== */
-
-        .table-card {
-
-            background:
-                rgba(
-                    15,
-                    23,
-                    42,
-                    0.72
-                );
-
-            border:
-                1px solid
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.08
-                );
-
-            border-radius:
-                18px;
-
-            padding:
-                25px;
-
-            margin-bottom:
-                35px;
-
-            overflow:
-                hidden;
-        }
-
-        .table {
-
-            margin-bottom:
-                0;
-
-            color:
-                #cbd5e1;
-        }
-
-        .table thead {
-
-            background:
-                #1e293b;
-        }
-
-        .table thead th {
-
-            color:
-                #94a3b8;
-
-            font-size:
-                12px;
-
-            text-transform:
-                uppercase;
-
-            letter-spacing:
-                0.6px;
-
-            border:
-                none;
-
-            padding:
-                14px;
-        }
-
-        .table tbody td {
-
-            background:
-                transparent;
-
-            color:
-                #cbd5e1;
-
-            border-color:
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.06
-                );
-
-            padding:
-                14px;
-        }
-
-        .table tbody tr:hover td {
-
-            background:
-                rgba(
-                    59,
-                    130,
-                    246,
-                    0.06
-                );
-        }
-
-        /* ==================================================
-           CHART
-        ================================================== */
-
-        .chart-card {
-
-            background:
-                white;
-
-            border-radius:
-                18px;
-
-            padding:
-                12px;
-
-            margin-bottom:
-                25px;
-
-            box-shadow:
-                0 15px 40px
-                rgba(
-                    0,
-                    0,
-                    0,
-                    0.2
-                );
-        }
-
-        /* ==================================================
-           DOWNLOAD
-        ================================================== */
-
-        .download-area {
-
-            display:
-                flex;
-
-            gap:
-                12px;
-
-            flex-wrap:
-                wrap;
-
-            margin-bottom:
-                35px;
-        }
-
-        .download-btn {
-
-            background:
-                rgba(
-                    59,
-                    130,
-                    246,
-                    0.12
-                );
-
-            color:
-                #60a5fa;
-
-            border:
-                1px solid
-                rgba(
-                    59,
-                    130,
-                    246,
-                    0.3
-                );
-
-            padding:
-                11px 20px;
-
-            border-radius:
-                10px;
-
-            text-decoration:
-                none;
-
-            font-weight:
-                700;
-
-            transition:
-                0.3s;
-        }
-
-        .download-btn:hover {
-
-            background:
-                #2563eb;
-
-            color:
-                white;
-
-            transform:
-                translateY(-2px);
-        }
-
-        /* ==================================================
-           FOOTER
-        ================================================== */
-
-        footer {
-
-            text-align:
-                center;
-
-            color:
-                #64748b;
-
-            padding:
-                30px;
-
-            font-size:
-                13px;
-        }
-
-        /* ==================================================
-           RESPONSIVE
-        ================================================== */
-
-        @media(max-width: 1200px) {
-
-            .kpi-grid {
-
-                grid-template-columns:
-                    repeat(3, 1fr);
-            }
-        }
-
-        @media(max-width: 800px) {
-
-            .kpi-grid {
-
-                grid-template-columns:
-                    repeat(2, 1fr);
-            }
-        }
-
-        @media(max-width: 600px) {
-
-            .navbar-custom {
-
-                padding:
-                    15px;
-            }
-
-            .dashboard {
-
-                padding:
-                    30px 15px;
-            }
-
-            .welcome h1 {
-
-                font-size:
-                    28px;
-            }
-
-            .kpi-grid {
-
-                grid-template-columns:
-                    1fr;
-            }
-
-            .download-area {
-
-                flex-direction:
-                    column;
-            }
-        }
-
-    </style>
-
+    <!-- Main CSS -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+    <!-- Plotly must load before any chart divs (Pass vs Fail / Performance are first) -->
+    <script
+        src="https://cdn.plot.ly/plotly-3.1.2.min.js"
+        charset="utf-8"
+    ></script>
 </head>
-
 
 <body>
 
+<div class="dashboard-shell">
 
-<!-- ======================================================
-     NAVBAR
-====================================================== -->
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
 
-<nav class="navbar-custom">
+    <aside class="dashboard-sidebar">
 
-    <div
-        class="d-flex
-               justify-content-between
-               align-items-center"
-    >
+        <!-- Brand -->
+        <div class="sidebar-brand">
 
-        <div class="brand">
+            <div class="brand-icon">
+                <img
+                    src="{{ url_for('static', filename='logo.png') }}"
+                    alt="StudentAnalytics logo"
+                >
+            </div>
 
-            📊 Student<span>Analytics</span>
-
-        </div>
-
-        <a
-            href="{{ url_for('logout') }}"
-            class="logout-btn"
-        >
-            Logout
-        </a>
-
-    </div>
-
-</nav>
-
-
-<!-- ======================================================
-     DASHBOARD
-====================================================== -->
-
-<div class="dashboard">
-
-
-    <!-- ==================================================
-         WELCOME
-    ================================================== -->
-
-    <div class="welcome">
-
-        <h1>
-            Student Performance Dashboard
-        </h1>
-
-        <p>
-            Analyze academic performance,
-            identify trends and discover
-            student insights.
-        </p>
-
-    </div>
-
-
-    <!-- ==================================================
-         UPLOAD
-    ================================================== -->
-
-    <div class="upload-card">
-
-        <div class="upload-title">
-
-            📂 Upload Student Result
+            <div class="brand-text">
+                Student<span>Analytics</span>
+            </div>
 
         </div>
 
+
+        <!-- Navigation -->
+        <div class="sidebar-section">
+
+            <div class="sidebar-label">
+                MAIN MENU
+            </div>
+
+            <a href="{{ url_for('dashboard') }}"
+               class="sidebar-item active">
+
+                <span class="sidebar-icon">{{ icon("home") }}</span>
+
+                <span class="sidebar-item-text">
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <a href="#student-analysis"
+               class="sidebar-item">
+
+                <span class="sidebar-icon">{{ icon("users") }}</span>
+
+                <span class="sidebar-item-text">
+                    Student Analysis
+                </span>
+
+            </a>
+
+
+            <a href="#subject-analysis"
+               class="sidebar-item">
+
+                <span class="sidebar-icon">{{ icon("book") }}</span>
+
+                <span class="sidebar-item-text">
+                    Subject Analysis
+                </span>
+
+            </a>
+
+
+            <a href="#performance"
+               class="sidebar-item">
+
+                <span class="sidebar-icon">{{ icon("trending-up") }}</span>
+
+                <span class="sidebar-item-text">
+                    Performance
+                </span>
+
+            </a>
+
+
+            <a href="#at-risk"
+               class="sidebar-item">
+
+                <span class="sidebar-icon">{{ icon("alert-triangle") }}</span>
+
+                <span class="sidebar-item-text">
+                    At-Risk Students
+                </span>
+
+            </a>
+
+
+            <a href="#ranking"
+               class="sidebar-item">
+
+                <span class="sidebar-icon">{{ icon("trophy") }}</span>
+
+                <span class="sidebar-item-text">
+                    Student Ranking
+                </span>
+
+            </a>
+
+        </div>
+
+
+        <!-- Reports -->
+        <div class="sidebar-section">
+
+            <div class="sidebar-label">
+                REPORTS
+            </div>
+
+
+            <a href="{{ url_for('download_report', student=selected_student, subject=selected_subject, result=selected_result) }}"
+               class="sidebar-item">
+
+                <span class="sidebar-icon">{{ icon("spreadsheet") }}</span>
+
+                <span class="sidebar-item-text">
+                    Download Excel
+                </span>
+
+            </a>
+
+
+            <a href="{{ url_for('download_pdf', student=selected_student, subject=selected_subject, result=selected_result) }}"
+               class="sidebar-item">
+
+                <span class="sidebar-icon">{{ icon("file") }}</span>
+
+                <span class="sidebar-item-text">
+                    Download PDF
+                </span>
+
+            </a>
+
+        </div>
+
+
+        <!-- Upload -->
+        <div class="sidebar-section">
+
+            <div class="sidebar-label">
+                DATA
+            </div>
+
+
+            <a href="#upload"
+               class="sidebar-item">
+
+                <span class="sidebar-icon">{{ icon("upload") }}</span>
+
+                <span class="sidebar-item-text">
+                    Upload Dataset
+                </span>
+
+            </a>
+
+        </div>
+
+
+        <!-- Bottom -->
+        <div class="sidebar-bottom">
+
+            <div class="sidebar-user">
+
+                <div class="user-avatar">
+                    {{ session.get("user", "U")[0] | upper }}
+                </div>
+
+                <div class="user-details">
+
+                    <strong>
+                        {{ session.get("user", "User") }}
+                    </strong>
+
+                    <span>
+                        Staff Account
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <a href="{{ url_for('logout') }}"
+               class="sidebar-logout">
+
+                <span class="sidebar-icon">{{ icon("logout") }}</span>
+
+                <span>
+                    Logout
+                </span>
+
+            </a>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <main class="dashboard-main">
+
+
+        <!-- TOP BAR -->
+        <header class="dashboard-topbar">
+
+            <div>
+
+                <div class="page-eyebrow">
+                    ACADEMIC ANALYTICS
+                </div>
+
+                <h1>
+                    Student Performance Dashboard
+                </h1>
+
+                <p>
+                    Analyze academic performance, rankings and subject insights.
+                </p>
+
+            </div>
+
+
+            <div class="topbar-user">
+
+                <div class="topbar-avatar">
+                    {{ session.get("user", "U")[0] | upper }}
+                </div>
+
+                <div>
+
+                    <strong>
+                        {{ session.get("user", "User") }}
+                    </strong>
+
+                    <span>
+                        Administrator
+                    </span>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =====================================================
+             ERROR
+             ===================================================== -->
 
         {% if error %}
 
-        <div class="alert alert-danger">
+        <div class="dashboard-alert">
 
-            {{ error }}
+            <span class="alert-icon">{{ icon("alert-triangle", 18) }}</span>
+
+            <div>
+                {{ error }}
+            </div>
 
         </div>
 
         {% endif %}
 
 
-        <!-- IMPORTANT:
-             Explicitly submit to /index
-        -->
 
-        <form
-            method="POST"
-            action="{{ url_for('index') }}"
-            enctype="multipart/form-data"
-        >
+        <!-- =====================================================
+             UPLOAD
+             ===================================================== -->
 
-            <div class="row g-3">
+        <section id="upload"
+                 class="dashboard-panel upload-panel">
 
-                <div class="col-md-9">
+            <div class="panel-heading">
 
-                    <input
-                        type="file"
-                        name="file"
-                        accept=".xlsx"
-                        class="form-control"
-                        required
-                    >
+                <div>
+
+                    <span class="section-kicker">
+                        DATASET
+                    </span>
+
+                    <h2>
+                        Upload Student Results
+                    </h2>
+
+                    <p>
+                        Upload your Excel dataset to generate real-time academic analytics.
+                    </p>
 
                 </div>
 
-
-                <div class="col-md-3">
-
-                    <button
-                        type="submit"
-                        class="upload-btn w-100"
-                    >
-
-                        🚀 Upload & Analyze
-
-                    </button>
-
+                <div class="panel-icon">
+                    {{ icon("folder", 18) }}
                 </div>
 
             </div>
 
-        </form>
 
-    </div>
+            <form
+                method="POST"
+                action="{{ url_for('index') }}"
+                enctype="multipart/form-data"
+                class="upload-form"
+            >
+
+                <div class="file-input-wrapper">
+
+                    <input
+                        type="file"
+                        name="file"
+                        id="file"
+                        accept=".xlsx"
+                        required
+                    >
+
+                    <label for="file">
+
+                        <span class="upload-icon">
+                            {{ icon("upload", 18) }}
+                        </span>
+
+                        <span>
+
+                            <strong>
+                                Choose Excel File
+                            </strong>
+
+                            <small>
+                                .xlsx files only
+                            </small>
+
+                        </span>
+
+                    </label>
+
+                </div>
 
 
-    {% if analysis %}
+                <button
+                    type="submit"
+                    class="primary-action"
+                >
+
+                    <span>
+                        Analyze Dataset
+                    </span>
+
+                    {{ icon("arrow-right", 16) }}
+
+                </button>
+
+            </form>
+
+        </section>
 
 
-    <!-- ==================================================
-         FILTERS
-    ================================================== -->
 
-    <div class="filter-card">
+        <!-- =====================================================
+             FILTERS
+             ===================================================== -->
 
-        <div class="filter-title">
+        <section class="dashboard-panel filters-panel">
 
-            🔎 Dashboard Filters
+            <div class="panel-heading compact">
 
-        </div>
+                <div>
+
+                    <span class="section-kicker">
+                        FILTERS
+                    </span>
+
+                    <h2>
+                        Analysis Controls
+                    </h2>
+
+                </div>
+
+                <div class="panel-icon">
+                    {{ icon("sliders", 18) }}
+                </div>
+
+            </div>
 
 
-        <form
-            method="GET"
-            action="{{ url_for('dashboard') }}"
-        >
+            <form
+                method="GET"
+                action="{{ url_for('dashboard') }}"
+                class="filters-grid"
+            >
 
-            <div class="row g-3 align-items-end">
+                <!-- Student -->
+                <div class="filter-group">
 
-
-                <!-- STUDENT -->
-
-                <div class="col-lg-3">
-
-                    <div class="filter-label">
+                    <label for="student">
                         Student
-                    </div>
+                    </label>
 
                     <select
                         name="student"
-                        class="form-select"
+                        id="student"
                     >
 
                         <option value="All">
@@ -1079,14 +451,12 @@
                         {% for student in students %}
 
                         <option
-                            value="{{ student }}"
-                            {% if selected_student == student %}
+                            value="{{ student.USN }}"
+                            {% if selected_student == student.USN %}
                             selected
                             {% endif %}
                         >
-
-                            {{ student }}
-
+                            {{ student.Name }} ({{ student.USN }})
                         </option>
 
                         {% endfor %}
@@ -1096,17 +466,16 @@
                 </div>
 
 
-                <!-- SUBJECT -->
+                <!-- Subject -->
+                <div class="filter-group">
 
-                <div class="col-lg-3">
-
-                    <div class="filter-label">
+                    <label for="subject">
                         Subject
-                    </div>
+                    </label>
 
                     <select
                         name="subject"
-                        class="form-select"
+                        id="subject"
                     >
 
                         <option value="All">
@@ -1121,9 +490,7 @@
                             selected
                             {% endif %}
                         >
-
                             {{ subject }}
-
                         </option>
 
                         {% endfor %}
@@ -1133,17 +500,16 @@
                 </div>
 
 
-                <!-- RESULT -->
+                <!-- Result -->
+                <div class="filter-group">
 
-                <div class="col-lg-2">
-
-                    <div class="filter-label">
+                    <label for="result">
                         Result
-                    </div>
+                    </label>
 
                     <select
                         name="result"
-                        class="form-select"
+                        id="result"
                     >
 
                         <option
@@ -1152,7 +518,7 @@
                             selected
                             {% endif %}
                         >
-                            All
+                            All Results
                         </option>
 
                         <option
@@ -1161,7 +527,7 @@
                             selected
                             {% endif %}
                         >
-                            PASS
+                            Passed
                         </option>
 
                         <option
@@ -1170,7 +536,7 @@
                             selected
                             {% endif %}
                         >
-                            FAIL
+                            Failed
                         </option>
 
                     </select>
@@ -1178,207 +544,489 @@
                 </div>
 
 
-                <!-- APPLY -->
-
-                <div class="col-lg-2">
-
-                    <button
-                        type="submit"
-                        class="filter-btn w-100"
-                    >
-
-                        Apply Filters
-
-                    </button>
-
-                </div>
-
-
-                <!-- RESET -->
-
-                <div class="col-lg-2">
-
-                    <a
-                        href="{{ url_for('dashboard') }}"
-                        class="reset-btn
-                               d-block
-                               text-center"
-                    >
-
-                        Reset
-
-                    </a>
-
-                </div>
-
-            </div>
-
-        </form>
-
-    </div>
-
-
-    <!-- ==================================================
-         KPI
-    ================================================== -->
-
-    <div class="section-title">
-
-        📌 <span>Performance Overview</span>
-
-    </div>
-
-
-    <div class="kpi-grid">
-
-
-        <div class="kpi-card">
-
-            <div class="kpi-icon">
-                👨‍🎓
-            </div>
-
-            <div class="kpi-label">
-                Total Students
-            </div>
-
-            <div class="kpi-value">
-                {{ total_students }}
-            </div>
-
-        </div>
-
-
-        <div class="kpi-card">
-
-            <div class="kpi-icon">
-                📚
-            </div>
-
-            <div class="kpi-label">
-                Subjects
-            </div>
-
-            <div class="kpi-value">
-                {{ total_subjects }}
-            </div>
-
-        </div>
-
-
-        <div class="kpi-card">
-
-            <div class="kpi-icon">
-                📈
-            </div>
-
-            <div class="kpi-label">
-                Average Marks
-            </div>
-
-            <div class="kpi-value">
-                {{ average_marks }}
-            </div>
-
-        </div>
-
-
-        <div class="kpi-card">
-
-            <div class="kpi-icon">
-                🎯
-            </div>
-
-            <div class="kpi-label">
-                Pass Percentage
-            </div>
-
-            <div class="kpi-value">
-                {{ pass_percentage }}%
-            </div>
-
-        </div>
-
-
-        <div class="kpi-card">
-
-            <div class="kpi-icon">
-                🏆
-            </div>
-
-            <div class="kpi-label">
-                Topper
-            </div>
-
-            <div class="kpi-value">
-
-                {{ topper_name }}
-
-                <small
-                    style="
-                        display:block;
-                        font-size:13px;
-                        color:#60a5fa;
-                    "
+                <button
+                    type="submit"
+                    class="filter-button"
                 >
+                    Apply Filters
+                </button>
 
-                    {{ topper_marks }}%
 
-                </small>
+                <a
+                    href="{{ url_for('dashboard') }}"
+                    class="reset-button"
+                >
+                    Reset
+                </a>
+
+            </form>
+
+            <p class="filter-export-note">
+                Excel and PDF downloads use the filters currently applied on this dashboard.
+            </p>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             KPI CARDS
+             ===================================================== -->
+
+        <section class="kpi-grid">
+
+
+            <div class="kpi-card kpi-blue">
+
+                <div class="kpi-top">
+
+                    <span>
+                        Total Students
+                    </span>
+
+                    <div class="kpi-icon">
+                        {{ icon("users", 16) }}
+                    </div>
+
+                </div>
+
+                <div class="kpi-value">
+                    {{ total_students }}
+                </div>
+
+                <div class="kpi-description">
+                    Students analyzed
+                </div>
+
+            </div>
+
+
+
+            <div class="kpi-card kpi-purple">
+
+                <div class="kpi-top">
+
+                    <span>
+                        Total Subjects
+                    </span>
+
+                    <div class="kpi-icon">
+                        {{ icon("book", 16) }}
+                    </div>
+
+                </div>
+
+                <div class="kpi-value">
+                    {{ total_subjects }}
+                </div>
+
+                <div class="kpi-description">
+                    Subjects evaluated
+                </div>
+
+            </div>
+
+
+
+            <div class="kpi-card kpi-cyan">
+
+                <div class="kpi-top">
+
+                    <span>
+                        Average Marks
+                    </span>
+
+                    <div class="kpi-icon">
+                        {{ icon("trending-up", 16) }}
+                    </div>
+
+                </div>
+
+                <div class="kpi-value">
+                    {{ average_marks }}
+                </div>
+
+                <div class="kpi-description">
+                    Overall class average
+                </div>
+
+            </div>
+
+
+
+            <div class="kpi-card kpi-green">
+
+                <div class="kpi-top">
+
+                    <span>
+                        Pass Percentage
+                    </span>
+
+                    <div class="kpi-icon">
+                        {{ icon("check-circle", 16) }}
+                    </div>
+
+                </div>
+
+                <div class="kpi-value">
+                    {{ pass_percentage }}%
+                </div>
+
+                <div class="kpi-description">
+                    Successful students
+                </div>
+
+            </div>
+
+
+
+            <div class="kpi-card kpi-orange">
+
+                <div class="kpi-top">
+
+                    <span>
+                        Top Performer
+                    </span>
+
+                    <div class="kpi-icon">
+                        {{ icon("trophy", 16) }}
+                    </div>
+
+                </div>
+
+                <div class="kpi-value kpi-name">
+                    {{ topper_name }}
+                </div>
+
+                <div class="kpi-description">
+                    {{ topper_marks }}% overall
+                </div>
+
+            </div>
+
+
+
+            <div class="kpi-card kpi-red">
+
+                <div class="kpi-top">
+
+                    <span>
+                        At-Risk Students
+                    </span>
+
+                    <div class="kpi-icon">
+                        {{ icon("alert-triangle", 16) }}
+                    </div>
+
+                </div>
+
+                <div class="kpi-value">
+                    {{ at_risk_count }}
+                </div>
+
+                <div class="kpi-description">
+                    Failed 1 or more subjects
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             QUICK SUMMARY
+             ===================================================== -->
+
+        <section class="summary-strip">
+
+            <div class="summary-item">
+
+                <span class="summary-icon pass">
+                    {{ icon("check", 16) }}
+                </span>
+
+                <div>
+
+                    <strong>
+                        {{ pass_students }}
+                    </strong>
+
+                    <span>
+                        Passed Students
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-divider"></div>
+
+
+            <div class="summary-item">
+
+                <span class="summary-icon fail">
+                    {{ icon("x", 16) }}
+                </span>
+
+                <div>
+
+                    <strong>
+                        {{ fail_students }}
+                    </strong>
+
+                    <span>
+                        Failed Students
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-divider"></div>
+
+
+            <div class="summary-item">
+
+                <span class="summary-icon top">
+                    {{ icon("star", 16) }}
+                </span>
+
+                <div>
+
+                    <strong>
+                        {{ topper_marks }}%
+                    </strong>
+
+                    <span>
+                        Highest Performance
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-divider"></div>
+
+
+            <div class="summary-item">
+
+                <span class="summary-icon risk">
+                    {{ icon("alert-triangle", 16) }}
+                </span>
+
+                <div>
+
+                    <strong>
+                        {{ at_risk_count }}
+                    </strong>
+
+                    <span>
+                        At-Risk Students
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             ANALYTICS HEADER
+             ===================================================== -->
+
+        <div id="performance"
+             class="analytics-heading">
+
+            <div>
+
+                <span class="section-kicker">
+                    VISUAL ANALYTICS
+                </span>
+
+                <h2>
+                    Performance Insights
+                </h2>
+
+                <p>
+                    Interactive analysis of student and subject performance.
+                </p>
 
             </div>
 
         </div>
 
-    </div>
 
 
-    <!-- ==================================================
-         DOWNLOADS
-    ================================================== -->
+        <!-- =====================================================
+             CHART GRID
+             ===================================================== -->
 
-    <div class="download-area">
-
-        <a
-            href="{{ url_for('download_report') }}"
-            class="download-btn"
-        >
-
-            ⬇ Download Excel Report
-
-        </a>
+        <section class="charts-grid">
 
 
-        <a
-            href="{{ url_for('download_pdf') }}"
-            class="download-btn"
-        >
+            <!-- Pass Fail -->
+            {% if pie_chart %}
 
-            📄 Generate PDF Report
+            <div class="chart-card">
 
-        </a>
+                {{ pie_chart | safe }}
 
-    </div>
+            </div>
 
-
-    <!-- ==================================================
-         SUBJECT ANALYSIS
-    ================================================== -->
-
-    <div class="section-title">
-
-        📚 <span>Subject Analysis</span>
-
-    </div>
+            {% endif %}
 
 
-    <div class="table-card">
 
-        <div class="table-responsive">
+            <!-- Performance -->
+            {% if performance_chart %}
 
-            <table class="table">
+            <div class="chart-card">
 
-                <thead>
+                {{ performance_chart | safe }}
+
+            </div>
+
+            {% endif %}
+
+
+
+            <!-- Subject -->
+            {% if subject_chart %}
+
+            <div id="subject-analysis"
+                 class="chart-card">
+
+                {{ subject_chart | safe }}
+
+            </div>
+
+            {% endif %}
+
+
+
+            <!-- Difficulty -->
+            {% if difficulty_chart %}
+
+            <div class="chart-card">
+
+                {{ difficulty_chart | safe }}
+
+            </div>
+
+            {% endif %}
+
+
+
+            <!-- Marks Distribution -->
+            {% if histogram_chart %}
+
+            <div class="chart-card">
+
+                {{ histogram_chart | safe }}
+
+            </div>
+
+            {% endif %}
+
+
+
+            <!-- Ranking -->
+            {% if ranking_chart %}
+
+            <div id="ranking"
+                 class="chart-card">
+
+                {{ ranking_chart | safe }}
+
+            </div>
+
+            {% endif %}
+
+
+
+            <!-- Heatmap -->
+            {% if heatmap_chart %}
+
+            <div class="chart-card chart-wide">
+
+                {{ heatmap_chart | safe }}
+
+            </div>
+
+            {% endif %}
+
+
+
+            <!-- Trend -->
+            {% if trend_chart %}
+
+            <div class="chart-card">
+
+                {{ trend_chart | safe }}
+
+            </div>
+
+            {% endif %}
+
+
+
+            <!-- Radar -->
+            {% if radar_chart %}
+
+            <div class="chart-card">
+
+                {{ radar_chart | safe }}
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+
+        <!-- =====================================================
+             SUBJECT ANALYSIS TABLE
+             ===================================================== -->
+
+        <section class="dashboard-panel table-panel">
+
+            <div class="panel-heading">
+
+                <div>
+
+                    <span class="section-kicker">
+                        SUBJECT ANALYTICS
+                    </span>
+
+                    <h2>
+                        Subject Performance Analysis
+                    </h2>
+
+                    <p>
+                        Detailed statistics for every subject.
+                    </p>
+
+                </div>
+
+                <div class="panel-icon">
+                    {{ icon("book", 18) }}
+                </div>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table class="analytics-table">
+
+                    <thead>
 
                     <tr>
 
@@ -1412,83 +1060,63 @@
 
                     </tr>
 
-                </thead>
+                    </thead>
 
 
-                <tbody>
+                    <tbody>
 
                     {% for item in analysis %}
 
                     <tr>
 
-                        <!-- FIXED KEY -->
                         <td>
                             <strong>
                                 {{ item.Subject }}
                             </strong>
                         </td>
 
-                        <!-- FIXED KEY -->
                         <td>
                             {{ item.Average }}
                         </td>
 
-                        <!-- FIXED KEY -->
                         <td>
                             {{ item.Highest }}
                         </td>
 
-                        <!-- FIXED KEY -->
                         <td>
                             {{ item.Lowest }}
                         </td>
 
-                        <!-- FIXED KEY -->
                         <td>
-
-                            <span
-                                class="badge bg-success"
-                            >
+                            <span class="status-badge pass-badge">
                                 {{ item.Pass }}
                             </span>
-
                         </td>
 
-                        <!-- FIXED KEY -->
                         <td>
-
-                            <span
-                                class="badge bg-danger"
-                            >
+                            <span class="status-badge fail-badge">
                                 {{ item.Fail }}
                             </span>
-
                         </td>
 
                         <td>
 
                             {% if item.Difficulty == "High" %}
 
-                            <span
-                                class="badge bg-danger"
-                            >
-                                🔴 High
+                            <span class="difficulty high">
+                                High
                             </span>
 
                             {% elif item.Difficulty == "Medium" %}
 
-                            <span
-                                class="badge bg-warning text-dark"
-                            >
-                                🟡 Medium
+                            <span class="difficulty medium">
+                                Medium
                             </span>
 
                             {% else %}
 
-                            <span
-                                class="badge bg-success"
-                            >
-                                🟢 Low
+                            <span class="difficulty low">
+                                Low
                             </span>
 
                             {% endif %}
@@ -1497,35 +1125,217 @@
 
                     </tr>
 
+                    {% else %}
+
+                    <tr>
+
+                        <td colspan="7"
+                            class="empty-table">
+
+                            No subject analysis available.
+
+                        </td>
+
+                    </tr>
+
                     {% endfor %}
 
-                </tbody>
+                    </tbody>
 
-            </table>
+                </table>
 
-        </div>
+            </div>
 
-    </div>
-
-
-    <!-- ==================================================
-         STUDENT RANKING
-    ================================================== -->
-
-    <div class="section-title">
-
-        🏆 <span>Student Rankings</span>
-
-    </div>
+        </section>
 
 
-    <div class="table-card">
 
-        <div class="table-responsive">
+        <!-- =====================================================
+             AT-RISK STUDENTS
+             ===================================================== -->
 
-            <table class="table">
+        <section id="at-risk"
+                 class="dashboard-panel table-panel">
 
-                <thead>
+            <div class="panel-heading">
+
+                <div>
+
+                    <span class="section-kicker">
+                        INTERVENTION
+                    </span>
+
+                    <h2>
+                        At-Risk Students
+                    </h2>
+
+                    <p>
+                        Students who failed one or more subjects, listed by highest fail count.
+                    </p>
+
+                </div>
+
+                <div class="panel-icon">
+                    {{ icon("alert-triangle", 18) }}
+                </div>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table class="analytics-table ranking-table">
+
+                    <thead>
+
+                    <tr>
+
+                        <th>
+                            Student
+                        </th>
+
+                        <th>
+                            USN
+                        </th>
+
+                        <th>
+                            Failed
+                        </th>
+
+                        <th>
+                            Passed
+                        </th>
+
+                        <th>
+                            Percentage
+                        </th>
+
+                        <th>
+                            Result
+                        </th>
+
+                        <th>
+                            Profile
+                        </th>
+
+                    </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% for student in at_risk_students %}
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                {{ student.Name }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ student.USN }}
+                        </td>
+
+                        <td>
+                            <span class="status-badge fail-badge">
+                                {{ student["Failed Subjects"] }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="status-badge pass-badge">
+                                {{ student["Passed Subjects"] }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <strong class="percentage-value">
+                                {{ student.Percentage }}%
+                            </strong>
+                        </td>
+
+                        <td>
+                            <span class="result-badge result-fail">
+                                {{ student.Result }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <a
+                                href="{{ url_for('student_profile', usn=student.USN) }}"
+                                class="profile-button"
+                            >
+                                View {{ icon("arrow-right", 14) }}
+                            </a>
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+
+                        <td colspan="7"
+                            class="empty-table">
+
+                            No at-risk students in the current view.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             STUDENT RANKING TABLE
+             ===================================================== -->
+
+        <section id="student-analysis"
+                 class="dashboard-panel table-panel">
+
+            <div class="panel-heading">
+
+                <div>
+
+                    <span class="section-kicker">
+                        STUDENT ANALYTICS
+                    </span>
+
+                    <h2>
+                        Student Ranking
+                    </h2>
+
+                    <p>
+                        Overall student performance and academic ranking.
+                    </p>
+
+                </div>
+
+                <div class="panel-icon">
+                    {{ icon("trophy", 18) }}
+                </div>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table class="analytics-table ranking-table">
+
+                    <thead>
 
                     <tr>
 
@@ -1534,7 +1344,7 @@
                         </th>
 
                         <th>
-                            Name
+                            Student
                         </th>
 
                         <th>
@@ -1559,10 +1369,10 @@
 
                     </tr>
 
-                </thead>
+                    </thead>
 
 
-                <tbody>
+                    <tbody>
 
                     {% for student in student_analysis %}
 
@@ -1572,19 +1382,27 @@
 
                             {% if student.Rank == 1 %}
 
-                            🥇
+                            <span class="rank-medal gold">
+                                {{ icon("trophy", 16) }}
+                            </span>
 
                             {% elif student.Rank == 2 %}
 
-                            🥈
+                            <span class="rank-medal silver">
+                                {{ icon("trophy", 16) }}
+                            </span>
 
                             {% elif student.Rank == 3 %}
 
-                            🥉
+                            <span class="rank-medal bronze">
+                                {{ icon("trophy", 16) }}
+                            </span>
 
                             {% else %}
 
-                            {{ student.Rank }}
+                            <span class="rank-number">
+                                {{ student.Rank }}
+                            </span>
 
                             {% endif %}
 
@@ -1612,7 +1430,7 @@
 
                         <td>
 
-                            <strong>
+                            <strong class="percentage-value">
                                 {{ student.Percentage }}%
                             </strong>
 
@@ -1623,17 +1441,13 @@
 
                             {% if student.Result == "PASS" %}
 
-                            <span
-                                class="badge bg-success"
-                            >
+                            <span class="result-badge result-pass">
                                 PASS
                             </span>
 
                             {% else %}
 
-                            <span
-                                class="badge bg-danger"
-                            >
+                            <span class="result-badge result-fail">
                                 FAIL
                             </span>
 
@@ -1646,12 +1460,23 @@
 
                             <a
                                 href="{{ url_for('student_profile', usn=student.USN) }}"
-                                class="btn btn-sm btn-primary"
+                                class="profile-button"
                             >
-
-                                View
-
+                                View {{ icon("arrow-right", 14) }}
                             </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+
+                        <td colspan="7"
+                            class="empty-table">
+
+                            No student data available.
 
                         </td>
 
@@ -1659,112 +1484,125 @@
 
                     {% endfor %}
 
-                </tbody>
+                    </tbody>
 
-            </table>
+                </table>
 
-        </div>
+            </div>
 
-    </div>
-
-
-    <!-- ==================================================
-         CHARTS
-    ================================================== -->
-
-    <div class="section-title">
-
-        📊 <span>Analytics</span>
-
-    </div>
+        </section>
 
 
-    {% if performance_chart %}
 
-    <div class="chart-card">
+        <!-- =====================================================
+             FOOTER
+             ===================================================== -->
 
-        {{ performance_chart | safe }}
+        <footer class="dashboard-footer">
 
-    </div>
+            <div>
 
-    {% endif %}
+                <strong>
+                    Student<span>Analytics</span>
+                </strong>
 
+                <p>
+                    Student Result Analysis System
+                </p>
 
-    {% if pie_chart %}
-
-    <div class="chart-card">
-
-        {{ pie_chart | safe }}
-
-    </div>
-
-    {% endif %}
+            </div>
 
 
-    {% if subject_chart %}
+            <div class="footer-tech">
 
-    <div class="chart-card">
+                Built with
+                <span>Flask</span>
+                •
+                <span>Pandas</span>
+                •
+                <span>Plotly</span>
 
-        {{ subject_chart | safe }}
+            </div>
 
-    </div>
-
-    {% endif %}
-
-
-    {% if difficulty_chart %}
-
-    <div class="chart-card">
-
-        {{ difficulty_chart | safe }}
-
-    </div>
-
-    {% endif %}
+        </footer>
 
 
-    {% if histogram_chart %}
-
-    <div class="chart-card">
-
-        {{ histogram_chart | safe }}
-
-    </div>
-
-    {% endif %}
-
-
-    {% if ranking_chart %}
-
-    <div class="chart-card">
-
-        {{ ranking_chart | safe }}
-
-    </div>
-
-    {% endif %}
-
-
-    {% endif %}
+    </main>
 
 </div>
 
 
-<!-- ======================================================
-     FOOTER
-====================================================== -->
 
-<footer>
+<!-- =========================================================
+     SMALL JS
+     ========================================================= -->
 
-    Student Result Analysis System
+<script>
 
-    <br>
+document.addEventListener("DOMContentLoaded", function () {
 
-    Built with Flask • Pandas • Plotly
+    const fileInput =
+        document.getElementById("file");
 
-</footer>
+    const fileLabel =
+        document.querySelector(".file-input-wrapper label");
 
+    if (fileInput && fileLabel) {
+
+        fileInput.addEventListener(
+            "change",
+            function () {
+
+                if (this.files.length > 0) {
+
+                    const fileName =
+                        this.files[0].name;
+
+                    fileLabel.querySelector("strong")
+                        .textContent = fileName;
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* Smooth scrolling */
+
+    document.querySelectorAll(
+        '.sidebar-item[href^="#"]'
+    ).forEach(function (link) {
+
+        link.addEventListener(
+            "click",
+            function (event) {
+
+                const target =
+                    document.querySelector(
+                        this.getAttribute("href")
+                    );
+
+                if (target) {
+
+                    event.preventDefault();
+
+                    target.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+
+                }
+
+            }
+        );
+
+    });
+
+});
+
+</script>
 
 </body>
-
 </html>

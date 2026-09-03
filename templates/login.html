@@ -1,3 +1,4 @@
+{% from "icons.html" import icon %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -114,7 +115,7 @@
             <div class="secure-title">
 
                 <span class="secure-icon">
-                    🛡
+                    {{ icon("shield", 16) }}
                 </span>
 
                 Secure Login
@@ -151,7 +152,7 @@
                     <div class="login-input-wrapper">
 
                         <span class="input-icon">
-                            👤
+                            {{ icon("user", 16) }}
                         </span>
 
                         <input
@@ -181,7 +182,7 @@
                     <div class="login-input-wrapper">
 
                         <span class="input-icon">
-                            🔒
+                            {{ icon("lock", 16) }}
                         </span>
 
                         <input
@@ -200,7 +201,12 @@
                             id="passwordToggle"
                             aria-label="Show password"
                         >
-                            👁
+                            <span class="toggle-eye">
+                                {{ icon("eye", 18) }}
+                            </span>
+                            <span class="toggle-eye-off" hidden>
+                                {{ icon("eye-off", 18) }}
+                            </span>
                         </button>
 
                     </div>
@@ -215,7 +221,8 @@
                     type="submit"
                     class="login-button"
                 >
-                    ➜ &nbsp; Login
+                    {{ icon("arrow-right", 18) }}
+                    Login
                 </button>
 
             </form>
@@ -262,11 +269,18 @@ const passwordToggle =
 
 passwordToggle.addEventListener("click", function () {
 
+    const eyeIcon =
+        passwordToggle.querySelector(".toggle-eye");
+
+    const eyeOffIcon =
+        passwordToggle.querySelector(".toggle-eye-off");
+
     if (passwordInput.type === "password") {
 
         passwordInput.type = "text";
 
-        passwordToggle.textContent = "🙈";
+        eyeIcon.hidden = true;
+        eyeOffIcon.hidden = false;
 
         passwordToggle.setAttribute(
             "aria-label",
@@ -277,7 +291,8 @@ passwordToggle.addEventListener("click", function () {
 
         passwordInput.type = "password";
 
-        passwordToggle.textContent = "👁";
+        eyeIcon.hidden = false;
+        eyeOffIcon.hidden = true;
 
         passwordToggle.setAttribute(
             "aria-label",
