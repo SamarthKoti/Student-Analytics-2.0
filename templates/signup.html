@@ -1,0 +1,360 @@
+{% from "icons.html" import icon %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Sign Up | StudentAnalytics</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+<div class="login-page">
+
+
+    <header class="login-brand">
+
+        <img
+            src="{{ url_for('static', filename='logo.png') }}"
+            class="login-brand-icon"
+            alt="College Logo"
+        >
+
+        <div class="login-brand-name">
+            Student<span>Analytics</span>
+        </div>
+
+    </header>
+
+
+    <main class="login-main">
+
+
+        <section class="login-intro">
+
+            <div class="quote-line"></div>
+
+            <h1>
+                Create your
+                <br>
+                staff
+                <span>account.</span>
+            </h1>
+
+            <p>
+                Verify your email, then choose
+                a username and password.
+            </p>
+
+            <p class="tagline">
+                Analyze. Understand. Improve.
+            </p>
+
+        </section>
+
+
+        <section class="login-card">
+
+
+            <div class="login-logo-wrapper">
+
+                <img
+                    src="{{ url_for('static', filename='logo.png') }}"
+                    class="login-logo"
+                    alt="College Logo"
+                >
+
+            </div>
+
+
+            <h2 class="login-title">
+                Student<span>Analytics</span>
+            </h2>
+
+            <p class="login-subtitle">
+                Create a new account
+            </p>
+
+
+            <div class="signup-steps">
+
+                <div class="signup-step {% if step == 'contact' %}is-active{% elif step in ['otp', 'account'] %}is-done{% endif %}">
+                    1. Email
+                </div>
+
+                <div class="signup-step {% if step == 'otp' %}is-active{% elif step == 'account' %}is-done{% endif %}">
+                    2. OTP
+                </div>
+
+                <div class="signup-step {% if step == 'account' %}is-active{% endif %}">
+                    3. Password
+                </div>
+
+            </div>
+
+
+            {% if error %}
+
+            <div class="login-error">
+                {{ error }}
+            </div>
+
+            {% endif %}
+
+
+            {% if info %}
+
+            <div class="login-info">
+                {{ info }}
+            </div>
+
+            {% endif %}
+
+
+            {% if step == "contact" %}
+
+            <form method="POST" action="{{ url_for('signup') }}">
+
+                <div class="login-form-group">
+
+                    <label for="email">
+                        Email ID
+                    </label>
+
+                    <div class="login-input-wrapper">
+
+                        <span class="input-icon">
+                            {{ icon("mail", 16) }}
+                        </span>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="login-input"
+                            placeholder="Enter your email"
+                            value="{{ email or '' }}"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="login-button"
+                >
+                    {{ icon("arrow-right", 18) }}
+                    Send OTP
+                </button>
+
+            </form>
+
+            {% elif step == "otp" %}
+
+            <p class="login-subtitle">
+                Code sent to {{ contact }}
+            </p>
+
+            {% if otp_preview %}
+
+            <div class="login-info">
+                Real email sending is possible, but Gmail keys are not set yet.
+                Use this demo code for now:
+                <div class="otp-preview">{{ otp_preview }}</div>
+            </div>
+
+            {% endif %}
+
+            <form method="POST" action="{{ url_for('signup_verify') }}">
+
+                <div class="login-form-group">
+
+                    <label for="otp">
+                        Enter OTP
+                    </label>
+
+                    <div class="login-input-wrapper">
+
+                        <span class="input-icon">
+                            {{ icon("key", 16) }}
+                        </span>
+
+                        <input
+                            type="text"
+                            id="otp"
+                            name="otp"
+                            class="login-input"
+                            placeholder="6-digit code"
+                            inputmode="numeric"
+                            maxlength="6"
+                            autocomplete="one-time-code"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="login-button"
+                >
+                    {{ icon("check", 18) }}
+                    Verify OTP
+                </button>
+
+            </form>
+
+            <form method="POST" action="{{ url_for('signup_resend') }}">
+
+                <button
+                    type="submit"
+                    class="login-button login-button-secondary"
+                >
+                    Resend code
+                </button>
+
+            </form>
+
+            {% else %}
+
+            <form method="POST" action="{{ url_for('signup_complete') }}">
+
+                <div class="login-form-group">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <div class="login-input-wrapper">
+
+                        <span class="input-icon">
+                            {{ icon("user", 16) }}
+                        </span>
+
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            class="login-input"
+                            placeholder="Choose a username"
+                            value="{{ username or '' }}"
+                            autocomplete="username"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="login-form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="login-input-wrapper">
+
+                        <span class="input-icon">
+                            {{ icon("lock", 16) }}
+                        </span>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="login-input"
+                            placeholder="Create a password"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="login-form-group">
+
+                    <label for="confirm_password">
+                        Confirm password
+                    </label>
+
+                    <div class="login-input-wrapper">
+
+                        <span class="input-icon">
+                            {{ icon("lock", 16) }}
+                        </span>
+
+                        <input
+                            type="password"
+                            id="confirm_password"
+                            name="confirm_password"
+                            class="login-input"
+                            placeholder="Re-enter password"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="login-button"
+                >
+                    {{ icon("arrow-right", 18) }}
+                    Create account
+                </button>
+
+            </form>
+
+            {% endif %}
+
+
+            <p class="auth-switch">
+                Already have an account?
+                <a href="{{ url_for('login') }}">Login</a>
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <footer class="login-footer">
+
+        <strong>
+            Student Result Analysis System
+        </strong>
+
+        <br>
+
+        Built with Flask • Pandas • Plotly
+
+    </footer>
+
+
+</div>
+
+
+</body>
+
+</html>

@@ -8,8 +8,13 @@ from flask import (
     send_file
 )
 
+from datetime import datetime, timedelta, timezone
+import re
+
 import pandas as pd
 import os
+
+import auth_store
 
 import plotly.graph_objs as go
 import plotly.offline as pyo
@@ -207,6 +212,70 @@ def get_chart_layout(**kwargs):
     return layout
 
 
+def valid_login(username, password):
+    if username in USERS and USERS[username] == password:
+        return True
+
+    return auth_store.verify_registered_user(username, password)
+
+
+def signup_pending():
+    pending = session.get("signup")
+
+    if not isinstance(pending, dict):
+        return None
+
+    expires_at = pending.get("expires_at")
+
+    try:
+        expiry = datetime.fromisoformat(expires_at)
+    except (TypeError, ValueError):
+        session.pop("signup", None)
+        return None
+
+    if datetime.now(timezone.utc) > expiry:
+        session.pop("signup", None)
+        return None
+
+    if not pending.get("email"):
+        session.pop("signup", None)
+        return None
+
+    return pending
+
+
+def start_signup_otp(email):
+    store = auth_store.load_users()
+
+    if auth_store.find_user(store, email=email):
+        return None, "This email is already registered. Please login."
+
+    code = auth_store.generate_otp()
+
+    try:
+        delivery, preview = auth_store.deliver_otp(email, code)
+    except Exception as exc:
+        print(f"[StudentAnalytics OTP] send failed: {exc}")
+        if isinstance(exc, RuntimeError) and str(exc).strip():
+            return None, str(exc)
+        return None, "Could not send the verification code. Check your Gmail settings in .env."
+
+    session["signup"] = {
+        "email": email,
+        "otp_hash": auth_store.hash_otp(code),
+        "expires_at": (
+            datetime.now(timezone.utc)
+            + timedelta(seconds=auth_store.OTP_TTL_SECONDS)
+        ).isoformat(),
+        "attempts": 0,
+        "verified": False,
+        "delivery": delivery,
+        "otp_preview": preview,
+    }
+
+    return preview, None
+
+
 # ============================================================
 # LOGIN
 # ============================================================
@@ -216,11 +285,12 @@ def login():
 
     if request.method == "POST":
 
-        username = request.form.get("username")
+        username = (request.form.get("username") or "").strip()
         password = request.form.get("password")
 
-        if username in USERS and USERS[username] == password:
+        if valid_login(username, password):
 
+            session.clear()
             session["user"] = username
 
             return redirect(
@@ -232,7 +302,192 @@ def login():
             error="Invalid Username or Password"
         )
 
-    return render_template("login.html")
+    return render_template(
+        "login.html",
+        success=request.args.get("registered")
+    )
+
+
+# ============================================================
+# SIGN UP
+# ============================================================
+
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+
+    if request.method == "GET":
+        session.pop("signup", None)
+
+        return render_template(
+            "signup.html",
+            step="contact"
+        )
+
+    email, error = auth_store.validate_email(request.form.get("email"))
+
+    if error:
+        return render_template(
+            "signup.html",
+            step="contact",
+            email=request.form.get("email", ""),
+            error=error
+        )
+
+    preview, error = start_signup_otp(email)
+
+    if error:
+        return render_template(
+            "signup.html",
+            step="contact",
+            email=request.form.get("email", ""),
+            error=error
+        )
+
+    return render_template(
+        "signup.html",
+        step="otp",
+        contact=email,
+        otp_preview=preview,
+        info="Enter the 6-digit code we sent you."
+    )
+
+
+@app.route("/signup/verify", methods=["POST"])
+def signup_verify():
+
+    pending = signup_pending()
+
+    if not pending:
+        return render_template(
+            "signup.html",
+            step="contact",
+            error="Your verification session expired. Please request a new code."
+        )
+
+    code = re.sub(r"\D", "", request.form.get("otp") or "")
+    pending["attempts"] = int(pending.get("attempts") or 0) + 1
+    session["signup"] = pending
+
+    if pending["attempts"] > auth_store.OTP_MAX_ATTEMPTS:
+        session.pop("signup", None)
+        return render_template(
+            "signup.html",
+            step="contact",
+            error="Too many incorrect codes. Please start again."
+        )
+
+    if len(code) != 6 or not auth_store.otp_matches(pending.get("otp_hash"), code):
+        return render_template(
+            "signup.html",
+            step="otp",
+            contact=pending.get("email"),
+            otp_preview=pending.get("otp_preview"),
+            error="Invalid verification code. Please try again."
+        )
+
+    pending["verified"] = True
+    session["signup"] = pending
+
+    return render_template(
+        "signup.html",
+        step="account",
+        contact=pending.get("email")
+    )
+
+
+@app.route("/signup/resend", methods=["POST"])
+def signup_resend():
+
+    pending = signup_pending()
+
+    if not pending:
+        return render_template(
+            "signup.html",
+            step="contact",
+            error="Your verification session expired. Please start again."
+        )
+
+    preview, error = start_signup_otp(pending.get("email"))
+
+    if error:
+        return render_template(
+            "signup.html",
+            step="otp",
+            contact=pending.get("email"),
+            error=error
+        )
+
+    refreshed = session.get("signup") or {}
+
+    return render_template(
+        "signup.html",
+        step="otp",
+        contact=refreshed.get("email"),
+        otp_preview=preview,
+        info="A new verification code has been sent."
+    )
+
+
+@app.route("/signup/complete", methods=["POST"])
+def signup_complete():
+
+    pending = signup_pending()
+
+    if not pending or not pending.get("verified"):
+        return render_template(
+            "signup.html",
+            step="contact",
+            error="Please verify your email before creating an account."
+        )
+
+    username, username_error = auth_store.validate_username(
+        request.form.get("username")
+    )
+    password_error = auth_store.validate_password(
+        request.form.get("password"),
+        request.form.get("confirm_password")
+    )
+
+    if username_error or password_error:
+        return render_template(
+            "signup.html",
+            step="account",
+            contact=pending.get("email"),
+            username=request.form.get("username", ""),
+            error=username_error or password_error
+        )
+
+    if username in USERS:
+        return render_template(
+            "signup.html",
+            step="account",
+            contact=pending.get("email"),
+            username=username,
+            error="This username is reserved. Please choose another."
+        )
+
+    store = auth_store.load_users()
+
+    if auth_store.find_user(store, username=username):
+        return render_template(
+            "signup.html",
+            step="account",
+            contact=pending.get("email"),
+            username=username,
+            error="This username is already taken."
+        )
+
+    auth_store.create_user(
+        username=username,
+        password=request.form.get("password"),
+        email=pending.get("email"),
+    )
+
+    session.pop("signup", None)
+
+    return redirect(
+        url_for("login", registered="1")
+    )
 
 
 # ============================================================

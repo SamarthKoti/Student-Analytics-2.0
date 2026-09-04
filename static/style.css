@@ -370,6 +370,8 @@ body {
 
     top: -100px;
     right: -80px;
+
+    pointer-events: none;
 }
 
 
@@ -676,13 +678,20 @@ body {
    LOGIN ERROR
    ========================================================= */
 
-.login-error {
+.login-error,
+.login-success,
+.login-info {
 
     padding: 12px 15px;
 
     margin-bottom: 18px;
 
     border-radius: 12px;
+
+    font-size: 13px;
+}
+
+.login-error {
 
     color: #fecaca;
 
@@ -691,8 +700,132 @@ body {
 
     border:
         1px solid rgba(239,68,68,0.20);
+}
+
+.login-success {
+
+    color: #bbf7d0;
+
+    background:
+        rgba(34,197,94,0.10);
+
+    border:
+        1px solid rgba(34,197,94,0.22);
+}
+
+.login-info {
+
+    color: #bfdbfe;
+
+    background:
+        rgba(79,140,255,0.10);
+
+    border:
+        1px solid rgba(79,140,255,0.22);
+}
+
+.auth-switch {
+
+    margin: 18px 0 0;
+
+    text-align: center;
+
+    color: var(--text-secondary);
 
     font-size: 13px;
+}
+
+.auth-switch a {
+
+    color: #93c5fd;
+
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+.auth-switch a:hover {
+
+    color: #dbeafe;
+}
+
+.signup-steps {
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 8px;
+
+    margin: 0 0 22px;
+}
+
+.signup-step {
+
+    padding: 8px 6px;
+
+    border-radius: 10px;
+
+    text-align: center;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    color: #94a3b8;
+
+    background: rgba(255,255,255,0.04);
+
+    border: 1px solid rgba(255,255,255,0.06);
+}
+
+.signup-step.is-active {
+
+    color: #dbeafe;
+
+    background: rgba(79,140,255,0.14);
+
+    border-color: rgba(79,140,255,0.28);
+}
+
+.signup-step.is-done {
+
+    color: #bbf7d0;
+
+    background: rgba(34,197,94,0.10);
+
+    border-color: rgba(34,197,94,0.22);
+}
+
+.otp-preview {
+
+    letter-spacing: 0.28em;
+
+    font-weight: 700;
+
+    color: #ffffff;
+}
+
+.login-button-secondary {
+
+    margin-top: 10px;
+
+    background: transparent;
+
+    color: #cbd5e1;
+
+    border: 1px solid rgba(255,255,255,0.12);
+
+    box-shadow: none;
+}
+
+.login-button-secondary:hover {
+
+    transform: none;
+
+    background: rgba(255,255,255,0.05);
+
+    box-shadow: none;
 }
 
 

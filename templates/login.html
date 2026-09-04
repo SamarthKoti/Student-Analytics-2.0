@@ -124,7 +124,15 @@
 
 
 
-            <!-- Error -->
+            <!-- Messages -->
+
+            {% if success %}
+
+            <div class="login-success">
+                Account created. You can now log in with your username and password.
+            </div>
+
+            {% endif %}
 
             {% if error %}
 
@@ -226,6 +234,11 @@
                 </button>
 
             </form>
+
+            <p class="auth-switch">
+                New here?
+                <a href="{{ url_for('signup') }}">Create an account</a>
+            </p>
 
         </section>
 
