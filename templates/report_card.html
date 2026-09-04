@@ -1,0 +1,86 @@
+{% from "icons.html" import icon %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% if missing %}Report card not found{% else %}{{ card.name }} · Report card{% endif %}
+    </title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="report-body">
+
+{% if missing %}
+
+<main class="report-card">
+    <h1>This report card link is invalid</h1>
+    <p>Ask staff to generate a new shareable card from the student profile.</p>
+</main>
+
+{% else %}
+
+<main class="report-card">
+    <div class="report-brand">
+        Student<span>Analytics</span>
+    </div>
+    <p class="report-kicker">Official snapshot · pass mark {{ pass_mark }}</p>
+    <h1>{{ card.name }}</h1>
+    <p class="report-usn">USN {{ card.usn }}</p>
+
+    <div class="report-stats">
+        <div>
+            <span>Result</span>
+            <strong>{{ card.result }}</strong>
+        </div>
+        <div>
+            <span>Percentage</span>
+            <strong>{{ "%.2f"|format(card.percentage) }}%</strong>
+        </div>
+        <div>
+            <span>Rank</span>
+            <strong>{{ card.rank }}</strong>
+        </div>
+        <div>
+            <span>Papers passed</span>
+            <strong>{{ card.passed }}/{{ card.passed + card.failed }}</strong>
+        </div>
+    </div>
+
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Code</th>
+                <th>Marks</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mark in card.marks %}
+            <tr>
+                <td>{{ mark["Subject Name"] }}</td>
+                <td>{{ mark["Subject Code"] }}</td>
+                <td>{{ mark.Marks }}</td>
+                <td>{{ mark.Status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="report-share">
+        {% if qr_svg %}
+        <div class="report-qr">{{ qr_svg | safe }}</div>
+        {% endif %}
+        <div>
+            <p>Scan or open this link to share the card. It does not include the staff dashboard.</p>
+            <code>{{ public_url }}</code>
+        </div>
+    </div>
+</main>
+
+{% endif %}
+
+</body>
+</html>

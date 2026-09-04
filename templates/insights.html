@@ -1,0 +1,364 @@
+{% from "icons.html" import icon %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insights Hub | StudentAnalytics</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.plot.ly/plotly-3.1.2.min.js" charset="utf-8"></script>
+</head>
+<body>
+<div class="dashboard-shell">
+    {% set nav_active = "insights" %}
+    {% include "_sidebar.html" %}
+
+    <main class="dashboard-main">
+
+        <header class="dashboard-topbar">
+            <div>
+                <div class="page-eyebrow">DECISION TOOLS</div>
+                <h1>Insights Hub</h1>
+                <p>Counseling queue, failure chains, integrity flags, backlogs, and batch compare.</p>
+            </div>
+        </header>
+
+
+        <section id="counseling" class="dashboard-panel table-panel">
+            <div class="panel-heading">
+                <div>
+                    <span class="section-kicker">THIS WEEK</span>
+                    <h2>Counseling queue</h2>
+                    <p>Prioritized actions for at-risk students, not just a fail list.</p>
+                </div>
+                <div class="panel-icon">{{ icon("users", 18) }}</div>
+            </div>
+
+            <div class="table-scroll">
+                <table class="analytics-table">
+                    <thead>
+                        <tr>
+                            <th>Priority</th>
+                            <th>Student</th>
+                            <th>USN</th>
+                            <th>Fails</th>
+                            <th>%</th>
+                            <th>Weakest</th>
+                            <th>Suggested action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in counseling %}
+                        <tr>
+                            <td>
+                                <span class="priority-pill priority-{{ item.priority|lower }}">
+                                    {{ item.priority }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('student_profile', usn=item.USN) }}">
+                                    {{ item.Name }}
+                                </a>
+                            </td>
+                            <td>{{ item.USN }}</td>
+                            <td>{{ item["Failed Subjects"] }}</td>
+                            <td>{{ item.Percentage }}%</td>
+                            <td>{{ item.Weakest }}</td>
+                            <td>{{ item.Action }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="7" class="empty-table">No counseling actions. Nobody is at risk in this file.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+
+        <section id="chains" class="dashboard-panel">
+            <div class="panel-heading">
+                <div>
+                    <span class="section-kicker">SUBJECT LINKS</span>
+                    <h2>Failure-chain map</h2>
+                    <p>If a student fails one paper, how often do they also fail another?</p>
+                </div>
+                <div class="panel-icon">{{ icon("git-compare", 18) }}</div>
+            </div>
+
+            {% if chain_chart %}
+            <div class="chart-box">
+                {{ chain_chart | safe }}
+            </div>
+            {% endif %}
+
+            <div class="table-scroll">
+                <table class="analytics-table">
+                    <thead>
+                        <tr>
+                            <th>If they fail</th>
+                            <th>They also fail</th>
+                            <th>Conditional %</th>
+                            <th>Subject baseline</th>
+                            <th>Lift</th>
+                            <th>Support</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pair in chains %}
+                        <tr>
+                            <td>{{ pair.source }}</td>
+                            <td>{{ pair.target }}</td>
+                            <td>{{ pair.conditional }}%</td>
+                            <td>{{ pair.baseline }}%</td>
+                            <td>{{ pair.lift }}</td>
+                            <td>{{ pair.support }} students</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="empty-table">Need overlapping fails in at least two subjects.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+
+        <section id="anomalies" class="dashboard-panel table-panel">
+            <div class="panel-heading">
+                <div>
+                    <span class="section-kicker">QUALITY CHECK</span>
+                    <h2>Integrity / anomaly flags</h2>
+                    <p>Unusual patterns for staff review — not accusations.</p>
+                </div>
+                <div class="panel-icon">{{ icon("shield", 18) }}</div>
+            </div>
+
+            <div class="table-scroll">
+                <table class="analytics-table">
+                    <thead>
+                        <tr>
+                            <th>Severity</th>
+                            <th>Type</th>
+                            <th>Where</th>
+                            <th>Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for flag in anomalies %}
+                        <tr>
+                            <td>
+                                <span class="priority-pill priority-{{ 'critical' if flag.severity == 'High' else 'watch' }}">
+                                    {{ flag.severity }}
+                                </span>
+                            </td>
+                            <td>{{ flag.type }}</td>
+                            <td>{{ flag.subject }}</td>
+                            <td>{{ flag.detail }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" class="empty-table">No unusual clusters in this dataset.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+
+        <section id="backlogs" class="dashboard-panel table-panel">
+            <div class="panel-heading">
+                <div>
+                    <span class="section-kicker">EXAM SECTION</span>
+                    <h2>Supplementary / backlog planner</h2>
+                    <p>{{ backlog_total }} paper(s) below {{ pass_mark }}. Download the Excel list for supply forms.</p>
+                </div>
+                <a href="{{ url_for('download_backlog') }}" class="primary-action">
+                    <span>Download backlog Excel</span>
+                    {{ icon("spreadsheet", 16) }}
+                </a>
+            </div>
+
+            <div class="backlog-stack">
+                <div class="backlog-block">
+                    <h3 class="mini-heading">By subject</h3>
+                    <div class="table-wrapper">
+                        <table class="analytics-table compact-table">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Backlogs</th>
+                                    <th>Avg gap to pass</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in backlog_summary %}
+                                <tr>
+                                    <td>{{ row.Subject }}</td>
+                                    <td>{{ row.Backlogs }}</td>
+                                    <td>{{ row["Average gap"] }}</td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="3" class="empty-table">No backlogs.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="backlog-block">
+                    <h3 class="mini-heading">Students needing supply</h3>
+                    <div class="table-wrapper">
+                        <table class="analytics-table compact-table">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>USN</th>
+                                    <th>Subject</th>
+                                    <th>Marks</th>
+                                    <th>Gap</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in backlogs %}
+                                <tr>
+                                    <td>{{ row.Name }}</td>
+                                    <td>{{ row.USN }}</td>
+                                    <td>{{ row["Subject Name"] }}</td>
+                                    <td>{{ row.Marks }}</td>
+                                    <td>{{ row.Gap }}</td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="5" class="empty-table">No supplementary papers.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="time-machine" class="dashboard-panel">
+            <div class="panel-heading">
+                <div>
+                    <span class="section-kicker">BATCH COMPARE</span>
+                    <h2>Time machine</h2>
+                    <p>Compare this upload with a previous saved dataset. Recovered = fail then pass.</p>
+                </div>
+                <div class="panel-icon">{{ icon("git-compare", 18) }}</div>
+            </div>
+
+            <form method="GET" action="{{ url_for('insights_hub') }}#time-machine" class="time-compare-form">
+                <div class="filter-group">
+                    <label for="left">Previous batch</label>
+                    <select name="left" id="left">
+                        <option value="current" {% if left_id == "current" %}selected{% endif %}>Current dataset</option>
+                        {% for batch in batches %}
+                        <option value="{{ batch.id }}" {% if left_id == batch.id %}selected{% endif %}>
+                            {{ batch.label }} · {{ batch.created_at[:10] }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="right">Newer batch</label>
+                    <select name="right" id="right">
+                        <option value="current" {% if right_id == "current" %}selected{% endif %}>Current dataset</option>
+                        {% for batch in batches %}
+                        <option value="{{ batch.id }}" {% if right_id == batch.id %}selected{% endif %}>
+                            {{ batch.label }} · {{ batch.created_at[:10] }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter-group filter-submit">
+                    <button type="submit" class="primary-action">Compare</button>
+                </div>
+            </form>
+
+            <div class="kpi-row">
+                <div class="kpi-card">
+                    <span>Pass % before</span>
+                    <strong>{{ left_stats.pass_percentage }}%</strong>
+                </div>
+                <div class="kpi-card">
+                    <span>Pass % after</span>
+                    <strong>{{ right_stats.pass_percentage }}%</strong>
+                </div>
+                <div class="kpi-card">
+                    <span>Recovered</span>
+                    <strong>{{ comparison.recovered_count }}</strong>
+                </div>
+                <div class="kpi-card">
+                    <span>Slipped</span>
+                    <strong>{{ comparison.slipped_count }}</strong>
+                </div>
+            </div>
+
+            <p class="compare-meta">
+                {{ comparison.shared }} students in both files ·
+                {{ comparison.new_students }} new ·
+                {{ comparison.missing_students }} missing from the newer file.
+                Upload a second Excel to build history.
+            </p>
+
+            <div class="insight-split">
+                <div>
+                    <h3 class="mini-heading">Recovered students</h3>
+                    <div class="table-scroll">
+                        <table class="analytics-table">
+                            <thead>
+                                <tr><th>Name</th><th>USN</th><th>%</th></tr>
+                            </thead>
+                            <tbody>
+                                {% for row in comparison.recovered %}
+                                <tr>
+                                    <td>{{ row.Name }}</td>
+                                    <td>{{ row.USN }}</td>
+                                    <td>{{ row.Percentage }}%</td>
+                                </tr>
+                                {% else %}
+                                <tr><td colspan="3" class="empty-table">No overlapping recoveries.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="mini-heading">Slipped to fail</h3>
+                    <div class="table-scroll">
+                        <table class="analytics-table">
+                            <thead>
+                                <tr><th>Name</th><th>USN</th><th>%</th></tr>
+                            </thead>
+                            <tbody>
+                                {% for row in comparison.slipped %}
+                                <tr>
+                                    <td>{{ row.Name }}</td>
+                                    <td>{{ row.USN }}</td>
+                                    <td>{{ row.Percentage }}%</td>
+                                </tr>
+                                {% else %}
+                                <tr><td colspan="3" class="empty-table">No overlapping slips.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+</div>
+</body>
+</html>

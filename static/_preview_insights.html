@@ -1,0 +1,1539 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insights Hub | StudentAnalytics</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.plot.ly/plotly-3.1.2.min.js" charset="utf-8"></script>
+</head>
+<body>
+<div class="dashboard-shell">
+    
+    
+
+
+
+
+
+<aside class="dashboard-sidebar">
+
+    <div class="sidebar-brand">
+
+        <div class="brand-icon">
+            <img
+                src="/static/logo.png"
+                alt="StudentAnalytics logo"
+            >
+        </div>
+
+        <div class="brand-text">
+            Student<span>Analytics</span>
+        </div>
+
+    </div>
+
+
+    <div class="sidebar-section">
+
+        <div class="sidebar-label">
+            MAIN MENU
+        </div>
+
+        <a href="/dashboard"
+           class="sidebar-item ">
+
+            <span class="sidebar-icon"><svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="ui-icon"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+>
+    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg></span>
+
+            <span class="sidebar-item-text">
+                Dashboard
+            </span>
+
+        </a>
+
+
+        <a href="/dashboard#student-analysis"
+           class="sidebar-item">
+
+            <span class="sidebar-icon"><svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="ui-icon"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+>
+    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+    <circle cx="9" cy="7" r="4"></circle>
+    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+</svg></span>
+
+            <span class="sidebar-item-text">
+                Student Analysis
+            </span>
+
+        </a>
+
+
+        <a href="/dashboard#subject-analysis"
+           class="sidebar-item">
+
+            <span class="sidebar-icon"><svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="ui-icon"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+>
+    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"></path>
+    <path d="M8 7h8"></path>
+    <path d="M8 11h6"></path>
+</svg></span>
+
+            <span class="sidebar-item-text">
+                Subject Analysis
+            </span>
+
+        </a>
+
+
+        <a href="/dashboard#performance"
+           class="sidebar-item">
+
+            <span class="sidebar-icon"><svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="ui-icon"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+>
+    <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+    <polyline points="16 7 22 7 22 13"></polyline>
+</svg></span>
+
+            <span class="sidebar-item-text">
+                Performance
+            </span>
+
+        </a>
+
+
+        <a href="/dashboard#at-risk"
+           class="sidebar-item">
+
+            <span class="sidebar-icon"><svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="ui-icon"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+>
+    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path>
+    <path d="M12 9v4"></path>
+    <path d="M12 17h.01"></path>
+</svg></span>
+
+            <span class="sidebar-item-text">
+                At-Risk Students
+            </span>
+
+        </a>
+
+
+        <a href="/dashboard#ranking"
+           class="sidebar-item">
+
+            <span class="sidebar-icon"><svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="ui-icon"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+>
+    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+    <path d="M4 22h16"></path>
+    <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+</svg></span>
+
+            <span class="sidebar-item-text">
+                Student Ranking
+            </span>
+
+        </a>
+
+
+        <a href="/insights"
+           class="sidebar-item active">
+
+            <span class="sidebar-icon"><svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="ui-icon"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+>
+    <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path>
+</svg></span>
+
+            <span class="sidebar-item-text">
+                Insights Hub
+            </span>
+
+        </a>
+
+
+        <a href="/insights#time-machine"
+           class="sidebar-item">
+
+            <span class="sidebar-icon"><svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="ui-icon"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+>
+    <circle cx="18" cy="18" r="3"></circle>
+    <circle cx="6" cy="6" r="3"></circle>
+    <path d="M13 6h3a2 2 0 0 1 2 2v7"></path>
+    <path d="M11 18H8a2 2 0 0 1-2-2V9"></path>
+</svg></span>
+
+            <span class="sidebar-item-text">
+                Time Machine
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <div class="sidebar-section">
+
+        <div class="sidebar-label">
+            REPORTS
+        </div>
+
+
+        <a href="/download?student=All&amp;subject=All&amp;result=All"
+           class="sidebar-item">
+
+            <span class="sidebar-icon"><svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="ui-icon"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+>
+    <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+    <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+    <path d="M8 13h2"></path>
+    <path d="M14 13h2"></path>
+    <path d="M8 17h2"></path>
+    <path d="M14 17h2"></path>
+</svg></span>
+
+            <span class="sidebar-item-text">
+                Download Excel
+            </span>
+
+        </a>
+
+
+        <a href="/download-pdf?student=All&amp;subject=All&amp;result=All"
+           class="sidebar-item">
+
+            <span class="sidebar-icon"><svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="ui-icon"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+>
+    <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+    <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+    <path d="M10 13H8"></path>
+    <path d="M16 13H8"></path>
+    <path d="M16 17H8"></path>
+</svg></span>
+
+            <span class="sidebar-item-text">
+                Download PDF
+            </span>
+
+        </a>
+
+
+        <a href="/download-backlog"
+           class="sidebar-item">
+
+            <span class="sidebar-icon"><svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="ui-icon"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+>
+    <rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect>
+    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+    <path d="M12 11h4"></path>
+    <path d="M12 16h4"></path>
+    <path d="M8 11h.01"></path>
+    <path d="M8 16h.01"></path>
+</svg></span>
+
+            <span class="sidebar-item-text">
+                Backlog Excel
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <div class="sidebar-section">
+
+        <div class="sidebar-label">
+            DATA
+        </div>
+
+
+        <a href="/index#upload"
+           class="sidebar-item ">
+
+            <span class="sidebar-icon"><svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="ui-icon"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+>
+    <path d="M12 3v12"></path>
+    <path d="m17 8-5-5-5 5"></path>
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+</svg></span>
+
+            <span class="sidebar-item-text">
+                Upload Dataset
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <div class="sidebar-bottom">
+
+        <div class="sidebar-user">
+
+            <div class="user-avatar">
+                H
+            </div>
+
+            <div class="user-details">
+
+                <strong>
+                    HOD
+                </strong>
+
+                <span>
+                    Staff Account
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <a href="/logout"
+           class="sidebar-logout">
+
+            <span class="sidebar-icon"><svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="ui-icon"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+>
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+    <polyline points="16 17 21 12 16 7"></polyline>
+    <line x1="21" x2="9" y1="12" y2="12"></line>
+</svg></span>
+
+            <span>
+                Logout
+            </span>
+
+        </a>
+
+    </div>
+
+</aside>
+
+    <main class="dashboard-main">
+
+        <header class="dashboard-topbar">
+            <div>
+                <div class="page-eyebrow">DECISION TOOLS</div>
+                <h1>Insights Hub</h1>
+                <p>Counseling queue, failure chains, integrity flags, backlogs, and batch compare.</p>
+            </div>
+        </header>
+
+
+        <section id="counseling" class="dashboard-panel table-panel">
+            <div class="panel-heading">
+                <div>
+                    <span class="section-kicker">THIS WEEK</span>
+                    <h2>Counseling queue</h2>
+                    <p>Prioritized actions for at-risk students, not just a fail list.</p>
+                </div>
+                <div class="panel-icon"><svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="ui-icon"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+>
+    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+    <circle cx="9" cy="7" r="4"></circle>
+    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+</svg></div>
+            </div>
+
+            <div class="table-scroll">
+                <table class="analytics-table">
+                    <thead>
+                        <tr>
+                            <th>Priority</th>
+                            <th>Student</th>
+                            <th>USN</th>
+                            <th>Fails</th>
+                            <th>%</th>
+                            <th>Weakest</th>
+                            <th>Suggested action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <tr>
+                            <td>
+                                <span class="priority-pill priority-critical">
+                                    Critical
+                                </span>
+                            </td>
+                            <td>
+                                <a href="/student/2VD23CS099">
+                                    Vijay Gowda
+                                </a>
+                            </td>
+                            <td>2VD23CS099</td>
+                            <td>5</td>
+                            <td>25.67%</td>
+                            <td>Operating Systems</td>
+                            <td>HOD counseling this week. Build a recovery plan for Operating Systems and remaining backlogs before the next assessment.</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>
+                                <span class="priority-pill priority-critical">
+                                    Critical
+                                </span>
+                            </td>
+                            <td>
+                                <a href="/student/2VD23CS096">
+                                    Tarun Shetty
+                                </a>
+                            </td>
+                            <td>2VD23CS096</td>
+                            <td>5</td>
+                            <td>27.5%</td>
+                            <td>Java Programming</td>
+                            <td>HOD counseling this week. Build a recovery plan for Java Programming and remaining backlogs before the next assessment.</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>
+                                <span class="priority-pill priority-critical">
+                                    Critical
+                                </span>
+                            </td>
+                            <td>
+                                <a href="/student/2VD23CS098">
+                                    Varsha Nair
+                                </a>
+                            </td>
+                            <td>2VD23CS098</td>
+                            <td>5</td>
+                            <td>28.83%</td>
+                            <td>Java Programming</td>
+                            <td>HOD counseling this week. Build a recovery plan for Java Programming and remaining backlogs before the next assessment.</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>
+                                <span class="priority-pill priority-critical">
+                                    Critical
+                                </span>
+                            </td>
+                            <td>
+                                <a href="/student/2VD23CS097">
+                                    Uday Bhat
+                                </a>
+                            </td>
+                            <td>2VD23CS097</td>
+                            <td>5</td>
+                            <td>33.83%</td>
+                            <td>DSA</td>
+                            <td>HOD counseling this week. Build a recovery plan for DSA and remaining backlogs before the next assessment.</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>
+                                <span class="priority-pill priority-critical">
+                                    Critical
+                                </span>
+                            </td>
+                            <td>
+                                <a href="/student/2VD23CS095">
+                                    Swathi Kumar
+                                </a>
+                            </td>
+                            <td>2VD23CS095</td>
+                            <td>3</td>
+                            <td>34.0%</td>
+                            <td>Computer Networks</td>
+                            <td>HOD counseling this week. Build a recovery plan for Computer Networks and remaining backlogs before the next assessment.</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>
+                                <span class="priority-pill priority-critical">
+                                    Critical
+                                </span>
+                            </td>
+                            <td>
+                                <a href="/student/2VD23CS092">
+                                    Sharath Gowda
+                                </a>
+                            </td>
+                            <td>2VD23CS092</td>
+                            <td>3</td>
+                            <td>35.5%</td>
+                            <td>Java Programming</td>
+                            <td>HOD counseling this week. Build a recovery plan for Java Programming and remaining backlogs before the next assessment.</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>
+                                <span class="priority-pill priority-critical">
+                                    Critical
+                                </span>
+                            </td>
+                            <td>
+                                <a href="/student/2VD23CS094">
+                                    Srinivas Rao
+                                </a>
+                            </td>
+                            <td>2VD23CS094</td>
+                            <td>3</td>
+                            <td>36.33%</td>
+                            <td>DBMS</td>
+                            <td>HOD counseling this week. Build a recovery plan for DBMS and remaining backlogs before the next assessment.</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>
+                                <span class="priority-pill priority-critical">
+                                    Critical
+                                </span>
+                            </td>
+                            <td>
+                                <a href="/student/2VD23CS093">
+                                    Shivani Patil
+                                </a>
+                            </td>
+                            <td>2VD23CS093</td>
+                            <td>2</td>
+                            <td>39.33%</td>
+                            <td>Software Engineering &amp; Project Management</td>
+                            <td>HOD counseling this week. Build a recovery plan for Software Engineering &amp; Project Management and remaining backlogs before the next assessment.</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>
+                                <span class="priority-pill priority-critical">
+                                    Critical
+                                </span>
+                            </td>
+                            <td>
+                                <a href="/student/2VD23CS100">
+                                    Zoya Khan
+                                </a>
+                            </td>
+                            <td>2VD23CS100</td>
+                            <td>1</td>
+                            <td>37.0%</td>
+                            <td>Operating Systems</td>
+                            <td>HOD counseling this week. Build a recovery plan for Operating Systems and remaining backlogs before the next assessment.</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>
+                                <span class="priority-pill priority-high">
+                                    High
+                                </span>
+                            </td>
+                            <td>
+                                <a href="/student/2VD23CS091">
+                                    Shalini Hegde
+                                </a>
+                            </td>
+                            <td>2VD23CS091</td>
+                            <td>2</td>
+                            <td>40.17%</td>
+                            <td>Computer Networks</td>
+                            <td>Subject-teacher meeting plus remedial class for Computer Networks. Check attendance and internals.</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>
+                                <span class="priority-pill priority-high">
+                                    High
+                                </span>
+                            </td>
+                            <td>
+                                <a href="/student/2VD23CS064">
+                                    Vinay Kumar
+                                </a>
+                            </td>
+                            <td>2VD23CS064</td>
+                            <td>1</td>
+                            <td>45.83%</td>
+                            <td>Computer Networks</td>
+                            <td>Subject-teacher meeting plus remedial class for Computer Networks. Check attendance and internals.</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+
+        <section id="chains" class="dashboard-panel">
+            <div class="panel-heading">
+                <div>
+                    <span class="section-kicker">SUBJECT LINKS</span>
+                    <h2>Failure-chain map</h2>
+                    <p>If a student fails one paper, how often do they also fail another?</p>
+                </div>
+                <div class="panel-icon"><svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="ui-icon"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+>
+    <circle cx="18" cy="18" r="3"></circle>
+    <circle cx="6" cy="6" r="3"></circle>
+    <path d="M13 6h3a2 2 0 0 1 2 2v7"></path>
+    <path d="M11 18H8a2 2 0 0 1-2-2V9"></path>
+</svg></div>
+            </div>
+
+            
+            <div class="chart-box">
+                <div>                            <div id="388c151b-9182-4481-a2f3-a28f46b1f8b5" class="plotly-graph-div" style="height:420px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("388c151b-9182-4481-a2f3-a28f46b1f8b5")) {                    Plotly.newPlot(                        "388c151b-9182-4481-a2f3-a28f46b1f8b5",                        [{"colorbar":{"thickness":12,"title":{"text":"%"}},"colorscale":[[0,"#0f172a"],[0.35,"#1d4ed8"],[0.7,"#f59e0b"],[1,"#ef4444"]],"hovertemplate":"Failed %{y}\u003cbr\u003ethen failed %{x}: %{z:.1f}%\u003cextra\u003e\u003c\u002fextra\u003e","x":["Computer Networks","DBMS","DSA","Java Programming","Operating Systems","Software Engineering & Project Management"],"y":["Computer Networks","DBMS","DSA","Java Programming","Operating Systems","Software Engineering & Project Management"],"z":[[null,33.3,55.6,77.8,55.6,33.3],[100.0,null,66.7,66.7,66.7,33.3],[100.0,40.0,null,100.0,60.0,60.0],[100.0,28.6,71.4,null,57.1,42.9],[71.4,28.6,42.9,57.1,null,42.9],[75.0,25.0,75.0,75.0,75.0,null]],"type":"heatmap"}],                        {"font":{"color":"#f8fafc","family":"Inter, Segoe UI, Arial","size":11},"height":420,"margin":{"b":90,"l":90,"r":24,"t":36},"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"rgba(0,0,0,0)","template":{"data":{"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"#E5ECF6","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2}}},"title":{"font":{"color":"#ffffff","size":14},"text":"If a student fails Y, how often do they also fail X?"},"xaxis":{"automargin":true,"tickangle":-35},"yaxis":{"automargin":true}},                        {"responsive": true}                    )                };            </script>        </div>
+            </div>
+            
+
+            <div class="table-scroll">
+                <table class="analytics-table">
+                    <thead>
+                        <tr>
+                            <th>If they fail</th>
+                            <th>They also fail</th>
+                            <th>Conditional %</th>
+                            <th>Subject baseline</th>
+                            <th>Lift</th>
+                            <th>Support</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <tr>
+                            <td>DSA</td>
+                            <td>Java Programming</td>
+                            <td>100.0%</td>
+                            <td>7.0%</td>
+                            <td>93.0</td>
+                            <td>5 students</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>DBMS</td>
+                            <td>Computer Networks</td>
+                            <td>100.0%</td>
+                            <td>9.0%</td>
+                            <td>91.0</td>
+                            <td>3 students</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>DSA</td>
+                            <td>Computer Networks</td>
+                            <td>100.0%</td>
+                            <td>9.0%</td>
+                            <td>91.0</td>
+                            <td>5 students</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Java Programming</td>
+                            <td>Computer Networks</td>
+                            <td>100.0%</td>
+                            <td>9.0%</td>
+                            <td>91.0</td>
+                            <td>7 students</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Computer Networks</td>
+                            <td>Java Programming</td>
+                            <td>77.8%</td>
+                            <td>7.0%</td>
+                            <td>70.8</td>
+                            <td>9 students</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Software Engineering &amp; Project Management</td>
+                            <td>DSA</td>
+                            <td>75.0%</td>
+                            <td>5.0%</td>
+                            <td>70.0</td>
+                            <td>4 students</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Software Engineering &amp; Project Management</td>
+                            <td>Java Programming</td>
+                            <td>75.0%</td>
+                            <td>7.0%</td>
+                            <td>68.0</td>
+                            <td>4 students</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Software Engineering &amp; Project Management</td>
+                            <td>Operating Systems</td>
+                            <td>75.0%</td>
+                            <td>7.0%</td>
+                            <td>68.0</td>
+                            <td>4 students</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Software Engineering &amp; Project Management</td>
+                            <td>Computer Networks</td>
+                            <td>75.0%</td>
+                            <td>9.0%</td>
+                            <td>66.0</td>
+                            <td>4 students</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Java Programming</td>
+                            <td>DSA</td>
+                            <td>71.4%</td>
+                            <td>5.0%</td>
+                            <td>66.4</td>
+                            <td>7 students</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Operating Systems</td>
+                            <td>Computer Networks</td>
+                            <td>71.4%</td>
+                            <td>9.0%</td>
+                            <td>62.4</td>
+                            <td>7 students</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>DBMS</td>
+                            <td>DSA</td>
+                            <td>66.7%</td>
+                            <td>5.0%</td>
+                            <td>61.7</td>
+                            <td>3 students</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>DBMS</td>
+                            <td>Java Programming</td>
+                            <td>66.7%</td>
+                            <td>7.0%</td>
+                            <td>59.7</td>
+                            <td>3 students</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>DBMS</td>
+                            <td>Operating Systems</td>
+                            <td>66.7%</td>
+                            <td>7.0%</td>
+                            <td>59.7</td>
+                            <td>3 students</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>DSA</td>
+                            <td>Software Engineering &amp; Project Management</td>
+                            <td>60.0%</td>
+                            <td>4.0%</td>
+                            <td>56.0</td>
+                            <td>5 students</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>DSA</td>
+                            <td>Operating Systems</td>
+                            <td>60.0%</td>
+                            <td>7.0%</td>
+                            <td>53.0</td>
+                            <td>5 students</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Java Programming</td>
+                            <td>Operating Systems</td>
+                            <td>57.1%</td>
+                            <td>7.0%</td>
+                            <td>50.1</td>
+                            <td>7 students</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Operating Systems</td>
+                            <td>Java Programming</td>
+                            <td>57.1%</td>
+                            <td>7.0%</td>
+                            <td>50.1</td>
+                            <td>7 students</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Computer Networks</td>
+                            <td>DSA</td>
+                            <td>55.6%</td>
+                            <td>5.0%</td>
+                            <td>50.6</td>
+                            <td>9 students</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Computer Networks</td>
+                            <td>Operating Systems</td>
+                            <td>55.6%</td>
+                            <td>7.0%</td>
+                            <td>48.6</td>
+                            <td>9 students</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+
+        <section id="anomalies" class="dashboard-panel table-panel">
+            <div class="panel-heading">
+                <div>
+                    <span class="section-kicker">QUALITY CHECK</span>
+                    <h2>Integrity / anomaly flags</h2>
+                    <p>Unusual patterns for staff review — not accusations.</p>
+                </div>
+                <div class="panel-icon"><svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="ui-icon"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+>
+    <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+</svg></div>
+            </div>
+
+            <div class="table-scroll">
+                <table class="analytics-table">
+                    <thead>
+                        <tr>
+                            <th>Severity</th>
+                            <th>Type</th>
+                            <th>Where</th>
+                            <th>Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <tr>
+                            <td colspan="4" class="empty-table">No unusual clusters in this dataset.</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+
+        <section id="backlogs" class="dashboard-panel table-panel">
+            <div class="panel-heading">
+                <div>
+                    <span class="section-kicker">EXAM SECTION</span>
+                    <h2>Supplementary / backlog planner</h2>
+                    <p>35 paper(s) below 35. Download the Excel list for supply forms.</p>
+                </div>
+                <a href="/download-backlog" class="primary-action">
+                    <span>Download backlog Excel</span>
+                    <svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="ui-icon"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+>
+    <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+    <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+    <path d="M8 13h2"></path>
+    <path d="M14 13h2"></path>
+    <path d="M8 17h2"></path>
+    <path d="M14 17h2"></path>
+</svg>
+                </a>
+            </div>
+
+            <div class="backlog-stack">
+                <div class="backlog-block">
+                    <h3 class="mini-heading">By subject</h3>
+                    <div class="table-wrapper">
+                        <table class="analytics-table compact-table">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Backlogs</th>
+                                    <th>Avg gap to pass</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                <tr>
+                                    <td>Computer Networks</td>
+                                    <td>9</td>
+                                    <td>6.6</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Java Programming</td>
+                                    <td>7</td>
+                                    <td>9.4</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Operating Systems</td>
+                                    <td>7</td>
+                                    <td>6.6</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>DSA</td>
+                                    <td>5</td>
+                                    <td>7.2</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Software Engineering &amp; Project Management</td>
+                                    <td>4</td>
+                                    <td>3.2</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>DBMS</td>
+                                    <td>3</td>
+                                    <td>4.0</td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="backlog-block">
+                    <h3 class="mini-heading">Students needing supply</h3>
+                    <div class="table-wrapper">
+                        <table class="analytics-table compact-table">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>USN</th>
+                                    <th>Subject</th>
+                                    <th>Marks</th>
+                                    <th>Gap</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                <tr>
+                                    <td>Swathi Kumar</td>
+                                    <td>2VD23CS095</td>
+                                    <td>Computer Networks</td>
+                                    <td>21</td>
+                                    <td>14</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Varsha Nair</td>
+                                    <td>2VD23CS098</td>
+                                    <td>Computer Networks</td>
+                                    <td>24</td>
+                                    <td>11</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Tarun Shetty</td>
+                                    <td>2VD23CS096</td>
+                                    <td>Computer Networks</td>
+                                    <td>25</td>
+                                    <td>10</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Vijay Gowda</td>
+                                    <td>2VD23CS099</td>
+                                    <td>Computer Networks</td>
+                                    <td>25</td>
+                                    <td>10</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Sharath Gowda</td>
+                                    <td>2VD23CS092</td>
+                                    <td>Computer Networks</td>
+                                    <td>29</td>
+                                    <td>6</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Srinivas Rao</td>
+                                    <td>2VD23CS094</td>
+                                    <td>Computer Networks</td>
+                                    <td>30</td>
+                                    <td>5</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Vinay Kumar</td>
+                                    <td>2VD23CS064</td>
+                                    <td>Computer Networks</td>
+                                    <td>34</td>
+                                    <td>1</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Shalini Hegde</td>
+                                    <td>2VD23CS091</td>
+                                    <td>Computer Networks</td>
+                                    <td>34</td>
+                                    <td>1</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Uday Bhat</td>
+                                    <td>2VD23CS097</td>
+                                    <td>Computer Networks</td>
+                                    <td>34</td>
+                                    <td>1</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Srinivas Rao</td>
+                                    <td>2VD23CS094</td>
+                                    <td>DBMS</td>
+                                    <td>29</td>
+                                    <td>6</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Varsha Nair</td>
+                                    <td>2VD23CS098</td>
+                                    <td>DBMS</td>
+                                    <td>31</td>
+                                    <td>4</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Uday Bhat</td>
+                                    <td>2VD23CS097</td>
+                                    <td>DBMS</td>
+                                    <td>33</td>
+                                    <td>2</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Tarun Shetty</td>
+                                    <td>2VD23CS096</td>
+                                    <td>DSA</td>
+                                    <td>20</td>
+                                    <td>15</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Varsha Nair</td>
+                                    <td>2VD23CS098</td>
+                                    <td>DSA</td>
+                                    <td>28</td>
+                                    <td>7</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Uday Bhat</td>
+                                    <td>2VD23CS097</td>
+                                    <td>DSA</td>
+                                    <td>29</td>
+                                    <td>6</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Vijay Gowda</td>
+                                    <td>2VD23CS099</td>
+                                    <td>DSA</td>
+                                    <td>29</td>
+                                    <td>6</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Swathi Kumar</td>
+                                    <td>2VD23CS095</td>
+                                    <td>DSA</td>
+                                    <td>33</td>
+                                    <td>2</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Tarun Shetty</td>
+                                    <td>2VD23CS096</td>
+                                    <td>Java Programming</td>
+                                    <td>15</td>
+                                    <td>20</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Vijay Gowda</td>
+                                    <td>2VD23CS099</td>
+                                    <td>Java Programming</td>
+                                    <td>19</td>
+                                    <td>16</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Sharath Gowda</td>
+                                    <td>2VD23CS092</td>
+                                    <td>Java Programming</td>
+                                    <td>22</td>
+                                    <td>13</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Varsha Nair</td>
+                                    <td>2VD23CS098</td>
+                                    <td>Java Programming</td>
+                                    <td>22</td>
+                                    <td>13</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Uday Bhat</td>
+                                    <td>2VD23CS097</td>
+                                    <td>Java Programming</td>
+                                    <td>33</td>
+                                    <td>2</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Shalini Hegde</td>
+                                    <td>2VD23CS091</td>
+                                    <td>Java Programming</td>
+                                    <td>34</td>
+                                    <td>1</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Swathi Kumar</td>
+                                    <td>2VD23CS095</td>
+                                    <td>Java Programming</td>
+                                    <td>34</td>
+                                    <td>1</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Vijay Gowda</td>
+                                    <td>2VD23CS099</td>
+                                    <td>Operating Systems</td>
+                                    <td>12</td>
+                                    <td>23</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Srinivas Rao</td>
+                                    <td>2VD23CS094</td>
+                                    <td>Operating Systems</td>
+                                    <td>29</td>
+                                    <td>6</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Varsha Nair</td>
+                                    <td>2VD23CS098</td>
+                                    <td>Operating Systems</td>
+                                    <td>29</td>
+                                    <td>6</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Tarun Shetty</td>
+                                    <td>2VD23CS096</td>
+                                    <td>Operating Systems</td>
+                                    <td>30</td>
+                                    <td>5</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Zoya Khan</td>
+                                    <td>2VD23CS100</td>
+                                    <td>Operating Systems</td>
+                                    <td>31</td>
+                                    <td>4</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Sharath Gowda</td>
+                                    <td>2VD23CS092</td>
+                                    <td>Operating Systems</td>
+                                    <td>34</td>
+                                    <td>1</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Shivani Patil</td>
+                                    <td>2VD23CS093</td>
+                                    <td>Operating Systems</td>
+                                    <td>34</td>
+                                    <td>1</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Vijay Gowda</td>
+                                    <td>2VD23CS099</td>
+                                    <td>Software Engineering &amp; Project Management</td>
+                                    <td>29</td>
+                                    <td>6</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Uday Bhat</td>
+                                    <td>2VD23CS097</td>
+                                    <td>Software Engineering &amp; Project Management</td>
+                                    <td>32</td>
+                                    <td>3</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Shivani Patil</td>
+                                    <td>2VD23CS093</td>
+                                    <td>Software Engineering &amp; Project Management</td>
+                                    <td>33</td>
+                                    <td>2</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Tarun Shetty</td>
+                                    <td>2VD23CS096</td>
+                                    <td>Software Engineering &amp; Project Management</td>
+                                    <td>33</td>
+                                    <td>2</td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="time-machine" class="dashboard-panel">
+            <div class="panel-heading">
+                <div>
+                    <span class="section-kicker">BATCH COMPARE</span>
+                    <h2>Time machine</h2>
+                    <p>Compare this upload with a previous saved dataset. Recovered = fail then pass.</p>
+                </div>
+                <div class="panel-icon"><svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="ui-icon"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+>
+    <circle cx="18" cy="18" r="3"></circle>
+    <circle cx="6" cy="6" r="3"></circle>
+    <path d="M13 6h3a2 2 0 0 1 2 2v7"></path>
+    <path d="M11 18H8a2 2 0 0 1-2-2V9"></path>
+</svg></div>
+            </div>
+
+            <form method="GET" action="/insights#time-machine" class="time-compare-form">
+                <div class="filter-group">
+                    <label for="left">Previous batch</label>
+                    <select name="left" id="left">
+                        <option value="current" >Current dataset</option>
+                        
+                        <option value="20260904_184605_e78779" >
+                            Student_Result_Analysis_100_Students.xlsx · 2026-09-04
+                        </option>
+                        
+                        <option value="20260904_183543_ba1372" selected>
+                            Student_Result_Analysis_100_Students.xlsx · 2026-09-04
+                        </option>
+                        
+                        <option value="20260904_183033_3b2caa" >
+                            Student_Result_Analysis_100_Students.xlsx · 2026-09-04
+                        </option>
+                        
+                        <option value="20260904_182951_e2b085" >
+                            Student_Result_Analysis_100_Students.xlsx · 2026-09-04
+                        </option>
+                        
+                        <option value="20260904_182612_025e2b" >
+                            Student_Result_Analysis_100_Students.xlsx · 2026-09-04
+                        </option>
+                        
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="right">Newer batch</label>
+                    <select name="right" id="right">
+                        <option value="current" selected>Current dataset</option>
+                        
+                        <option value="20260904_184605_e78779" >
+                            Student_Result_Analysis_100_Students.xlsx · 2026-09-04
+                        </option>
+                        
+                        <option value="20260904_183543_ba1372" >
+                            Student_Result_Analysis_100_Students.xlsx · 2026-09-04
+                        </option>
+                        
+                        <option value="20260904_183033_3b2caa" >
+                            Student_Result_Analysis_100_Students.xlsx · 2026-09-04
+                        </option>
+                        
+                        <option value="20260904_182951_e2b085" >
+                            Student_Result_Analysis_100_Students.xlsx · 2026-09-04
+                        </option>
+                        
+                        <option value="20260904_182612_025e2b" >
+                            Student_Result_Analysis_100_Students.xlsx · 2026-09-04
+                        </option>
+                        
+                    </select>
+                </div>
+                <div class="filter-group filter-submit">
+                    <button type="submit" class="primary-action">Compare</button>
+                </div>
+            </form>
+
+            <div class="kpi-row">
+                <div class="kpi-card">
+                    <span>Pass % before</span>
+                    <strong>89.0%</strong>
+                </div>
+                <div class="kpi-card">
+                    <span>Pass % after</span>
+                    <strong>89.0%</strong>
+                </div>
+                <div class="kpi-card">
+                    <span>Recovered</span>
+                    <strong>0</strong>
+                </div>
+                <div class="kpi-card">
+                    <span>Slipped</span>
+                    <strong>0</strong>
+                </div>
+            </div>
+
+            <p class="compare-meta">
+                100 students in both files ·
+                0 new ·
+                0 missing from the newer file.
+                Upload a second Excel to build history.
+            </p>
+
+            <div class="insight-split">
+                <div>
+                    <h3 class="mini-heading">Recovered students</h3>
+                    <div class="table-scroll">
+                        <table class="analytics-table">
+                            <thead>
+                                <tr><th>Name</th><th>USN</th><th>%</th></tr>
+                            </thead>
+                            <tbody>
+                                
+                                <tr><td colspan="3" class="empty-table">No overlapping recoveries.</td></tr>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="mini-heading">Slipped to fail</h3>
+                    <div class="table-scroll">
+                        <table class="analytics-table">
+                            <thead>
+                                <tr><th>Name</th><th>USN</th><th>%</th></tr>
+                            </thead>
+                            <tbody>
+                                
+                                <tr><td colspan="3" class="empty-table">No overlapping slips.</td></tr>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+</div>
+</body>
+</html>

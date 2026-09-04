@@ -5,3 +5,6 @@ __pycache__/
 *.pyc
 .env
 data/registered_users.json
+data/column_maps.json
+data/share_cards.json
+data/batches/

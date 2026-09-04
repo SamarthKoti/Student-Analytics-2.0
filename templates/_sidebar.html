@@ -1,0 +1,231 @@
+{% from "icons.html" import icon %}
+{% set selected_student = selected_student|default("All") %}
+{% set selected_subject = selected_subject|default("All") %}
+{% set selected_result = selected_result|default("All") %}
+{% set dash = url_for("dashboard") %}
+
+<aside class="dashboard-sidebar">
+
+    <div class="sidebar-brand">
+
+        <div class="brand-icon">
+            <img
+                src="{{ url_for('static', filename='logo.png') }}"
+                alt="StudentAnalytics logo"
+            >
+        </div>
+
+        <div class="brand-text">
+            Student<span>Analytics</span>
+        </div>
+
+    </div>
+
+
+    <div class="sidebar-section">
+
+        <div class="sidebar-label">
+            MAIN MENU
+        </div>
+
+        <a href="{{ dash }}"
+           class="sidebar-item {% if nav_active == 'dashboard' %}active{% endif %}">
+
+            <span class="sidebar-icon">{{ icon("home") }}</span>
+
+            <span class="sidebar-item-text">
+                Dashboard
+            </span>
+
+        </a>
+
+
+        <a href="{% if nav_active == 'dashboard' %}#student-analysis{% else %}{{ dash }}#student-analysis{% endif %}"
+           class="sidebar-item">
+
+            <span class="sidebar-icon">{{ icon("users") }}</span>
+
+            <span class="sidebar-item-text">
+                Student Analysis
+            </span>
+
+        </a>
+
+
+        <a href="{% if nav_active == 'dashboard' %}#subject-analysis{% else %}{{ dash }}#subject-analysis{% endif %}"
+           class="sidebar-item">
+
+            <span class="sidebar-icon">{{ icon("book") }}</span>
+
+            <span class="sidebar-item-text">
+                Subject Analysis
+            </span>
+
+        </a>
+
+
+        <a href="{% if nav_active == 'dashboard' %}#performance{% else %}{{ dash }}#performance{% endif %}"
+           class="sidebar-item">
+
+            <span class="sidebar-icon">{{ icon("trending-up") }}</span>
+
+            <span class="sidebar-item-text">
+                Performance
+            </span>
+
+        </a>
+
+
+        <a href="{% if nav_active == 'dashboard' %}#at-risk{% else %}{{ dash }}#at-risk{% endif %}"
+           class="sidebar-item">
+
+            <span class="sidebar-icon">{{ icon("alert-triangle") }}</span>
+
+            <span class="sidebar-item-text">
+                At-Risk Students
+            </span>
+
+        </a>
+
+
+        <a href="{% if nav_active == 'dashboard' %}#ranking{% else %}{{ dash }}#ranking{% endif %}"
+           class="sidebar-item">
+
+            <span class="sidebar-icon">{{ icon("trophy") }}</span>
+
+            <span class="sidebar-item-text">
+                Student Ranking
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('insights_hub') }}"
+           class="sidebar-item {% if nav_active == 'insights' %}active{% endif %}">
+
+            <span class="sidebar-icon">{{ icon("zap") }}</span>
+
+            <span class="sidebar-item-text">
+                Insights Hub
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('insights_hub') }}#time-machine"
+           class="sidebar-item">
+
+            <span class="sidebar-icon">{{ icon("git-compare") }}</span>
+
+            <span class="sidebar-item-text">
+                Time Machine
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <div class="sidebar-section">
+
+        <div class="sidebar-label">
+            REPORTS
+        </div>
+
+
+        <a href="{{ url_for('download_report', student=selected_student, subject=selected_subject, result=selected_result) }}"
+           class="sidebar-item">
+
+            <span class="sidebar-icon">{{ icon("spreadsheet") }}</span>
+
+            <span class="sidebar-item-text">
+                Download Excel
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('download_pdf', student=selected_student, subject=selected_subject, result=selected_result) }}"
+           class="sidebar-item">
+
+            <span class="sidebar-icon">{{ icon("file") }}</span>
+
+            <span class="sidebar-item-text">
+                Download PDF
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('download_backlog') }}"
+           class="sidebar-item">
+
+            <span class="sidebar-icon">{{ icon("clipboard") }}</span>
+
+            <span class="sidebar-item-text">
+                Backlog Excel
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <div class="sidebar-section">
+
+        <div class="sidebar-label">
+            DATA
+        </div>
+
+
+        <a href="{% if nav_active == 'dashboard' %}#upload{% else %}{{ url_for('index') }}#upload{% endif %}"
+           class="sidebar-item {% if nav_active == 'map' %}active{% endif %}">
+
+            <span class="sidebar-icon">{{ icon("upload") }}</span>
+
+            <span class="sidebar-item-text">
+                Upload Dataset
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <div class="sidebar-bottom">
+
+        <div class="sidebar-user">
+
+            <div class="user-avatar">
+                {{ session.get("user", "U")[0] | upper }}
+            </div>
+
+            <div class="user-details">
+
+                <strong>
+                    {{ session.get("user", "User") }}
+                </strong>
+
+                <span>
+                    Staff Account
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <a href="{{ url_for('logout') }}"
+           class="sidebar-logout">
+
+            <span class="sidebar-icon">{{ icon("logout") }}</span>
+
+            <span>
+                Logout
+            </span>
+
+        </a>
+
+    </div>
+
+</aside>

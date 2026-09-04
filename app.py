@@ -15,6 +15,7 @@ import pandas as pd
 import os
 
 import auth_store
+import insights
 
 import plotly.graph_objs as go
 import plotly.offline as pyo
@@ -530,50 +531,31 @@ def index():
                 )
             )
 
-        filepath = os.path.join(
+        pending_path = os.path.join(
             app.config["UPLOAD_FOLDER"],
-            "uploaded_data.xlsx"
+            "pending_upload.xlsx"
         )
 
         try:
 
-            file.save(filepath)
+            file.save(pending_path)
 
-            test_df = pd.read_excel(filepath)
+            test_df = pd.read_excel(pending_path)
 
-            required_columns = [
-                "Name",
-                "USN",
-                "Subject Name",
-                "Subject Code",
-                "Marks"
-            ]
-
-            missing_columns = [
-                column
-                for column in required_columns
-                if column not in test_df.columns
-            ]
-
-            if missing_columns:
-
-                if os.path.exists(filepath):
-                    os.remove(filepath)
+            if test_df.empty:
 
                 return render_template(
                     "index.html",
                     **empty_dashboard_context(
-                        error=(
-                            "Missing required columns: "
-                            + ", ".join(missing_columns)
-                        )
+                        error="The Excel file has no rows to analyze."
                     )
                 )
 
-            session["uploaded_file"] = filepath
+            session["pending_upload"] = pending_path
+            session["pending_filename"] = file.filename
 
             return redirect(
-                url_for("dashboard")
+                url_for("map_columns")
             )
 
         except Exception as e:
@@ -595,17 +577,7 @@ def index():
 # LOAD DATA
 # ============================================================
 
-def load_data():
-
-    filepath = session.get("uploaded_file")
-
-    if (
-        not filepath
-        or not os.path.exists(filepath)
-    ):
-        return None
-
-    df = pd.read_excel(filepath)
+def clean_results_frame(df):
 
     required_columns = [
         "Name",
@@ -623,9 +595,7 @@ def load_data():
                 f"Missing required column: {column}"
             )
 
-    # --------------------------------------------------------
-    # CLEAN MARKS
-    # --------------------------------------------------------
+    df = df.copy()
 
     df["Marks"] = pd.to_numeric(
         df["Marks"],
@@ -641,10 +611,6 @@ def load_data():
         lower=0,
         upper=100
     )
-
-    # --------------------------------------------------------
-    # CLEAN TEXT COLUMNS
-    # --------------------------------------------------------
 
     df["Name"] = df["Name"].map(normalize_text)
 
@@ -663,7 +629,6 @@ def load_data():
     if df.empty:
         return df
 
-    # One mark per student per subject (duplicate Excel rows inflate totals)
     df = (
         df.groupby(
             ["USN", "Subject Name", "Subject Code"],
@@ -677,6 +642,59 @@ def load_data():
     )
 
     return df
+
+
+def finalize_uploaded_dataset(df, original_name):
+
+    filepath = os.path.join(
+        app.config["UPLOAD_FOLDER"],
+        "uploaded_data.xlsx"
+    )
+
+    cleaned = clean_results_frame(df)
+
+    if cleaned is None or cleaned.empty:
+        raise ValueError("No valid student rows after cleaning the mapped columns.")
+
+    cleaned.to_excel(filepath, index=False)
+    session["uploaded_file"] = filepath
+    session.pop("pending_upload", None)
+    session.pop("pending_filename", None)
+
+    student_df = create_student_analysis(cleaned)
+    stats = insights.batch_stats(
+        student_df,
+        cleaned["Subject Name"].nunique()
+    )
+    insights.archive_batch(filepath, original_name, stats)
+    return filepath
+
+
+def load_data():
+
+    filepath = session.get("uploaded_file")
+
+    if (
+        not filepath
+        or not os.path.exists(filepath)
+    ):
+        return None
+
+    df = pd.read_excel(filepath)
+    return clean_results_frame(df)
+
+
+def load_batch_frame(batch_id):
+
+    if batch_id == "current":
+        return load_data()
+
+    batch = insights.get_batch(batch_id)
+
+    if not batch or not os.path.isfile(batch.get("path", "")):
+        return None
+
+    return clean_results_frame(pd.read_excel(batch["path"]))
 
 
 # ============================================================
@@ -2648,6 +2666,10 @@ def student_profile(usn):
             marks_df["Marks"].idxmin()
         ]
 
+        peer_percentages = student_df[
+            student_df["USN"] != usn
+        ]["Percentage"].tolist()
+
         return render_template(
 
             "student_profile.html",
@@ -2660,7 +2682,15 @@ def student_profile(usn):
 
             strongest=strongest.to_dict(),
 
-            weakest=weakest.to_dict()
+            weakest=weakest.to_dict(),
+
+            pass_mark=PASS_MARK,
+
+            peer_percentages=peer_percentages,
+
+            selected_student="All",
+            selected_subject="All",
+            selected_result="All",
         )
 
     except Exception as e:
@@ -3738,8 +3768,253 @@ def download_pdf():
 
 
 # ============================================================
-# LOGOUT
+# COLUMN MAPPING WIZARD
 # ============================================================
+
+@app.route("/map-columns", methods=["GET", "POST"])
+def map_columns():
+
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    pending_path = session.get("pending_upload")
+
+    if not pending_path or not os.path.isfile(pending_path):
+        return redirect(url_for("index"))
+
+    try:
+        raw_df = pd.read_excel(pending_path)
+    except Exception as exc:
+        return render_template(
+            "index.html",
+            **empty_dashboard_context(
+                error=f"Could not read the Excel file: {exc}"
+            )
+        )
+
+    columns = [str(column) for column in raw_df.columns.tolist()]
+    guessed, unused = insights.guess_column_mapping(columns)
+    recipe = insights.matching_recipe(columns)
+
+    if recipe and recipe.get("mapping"):
+        guessed = recipe["mapping"]
+
+    if request.method == "POST":
+        mapping = {
+            field: (request.form.get(field) or "").strip()
+            for field in insights.REQUIRED_FIELDS
+        }
+
+        if len(set(mapping.values())) < len(mapping.values()) or any(
+            not value for value in mapping.values()
+        ):
+            return render_template(
+                "map_columns.html",
+                columns=columns,
+                mapping=mapping,
+                unused=unused,
+                recipes=insights.load_recipes(),
+                preview=raw_df.head(6).to_dict(orient="records"),
+                filename=session.get("pending_filename", "upload.xlsx"),
+                error="Map every required field to a different Excel column.",
+                selected_student="All",
+                selected_subject="All",
+                selected_result="All",
+            )
+
+        try:
+            mapped = insights.apply_column_mapping(raw_df, mapping)
+            recipe_name = (request.form.get("recipe_name") or "").strip()
+            if recipe_name:
+                insights.save_recipe(recipe_name, columns, mapping)
+            finalize_uploaded_dataset(
+                mapped,
+                session.get("pending_filename", "upload.xlsx"),
+            )
+            return redirect(url_for("dashboard"))
+        except Exception as exc:
+            return render_template(
+                "map_columns.html",
+                columns=columns,
+                mapping=mapping,
+                unused=unused,
+                recipes=insights.load_recipes(),
+                preview=raw_df.head(6).to_dict(orient="records"),
+                filename=session.get("pending_filename", "upload.xlsx"),
+                error=str(exc),
+                selected_student="All",
+                selected_subject="All",
+                selected_result="All",
+            )
+
+    return render_template(
+        "map_columns.html",
+        columns=columns,
+        mapping=guessed,
+        unused=unused,
+        recipes=insights.load_recipes(),
+        preview=raw_df.head(6).to_dict(orient="records"),
+        filename=session.get("pending_filename", "upload.xlsx"),
+        matched_recipe=(recipe or {}).get("name"),
+        selected_student="All",
+        selected_subject="All",
+        selected_result="All",
+    )
+
+
+# ============================================================
+# INSIGHTS HUB
+# ============================================================
+
+@app.route("/insights")
+def insights_hub():
+
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    if "uploaded_file" not in session:
+        return redirect(url_for("index"))
+
+    df = load_data()
+
+    if df is None:
+        return redirect(url_for("index"))
+
+    student_df = create_student_analysis(df)
+    queue = insights.counseling_queue(df, student_df, PASS_MARK)
+    pairs, chain_subjects, chain_chart = insights.failure_chains(df, PASS_MARK)
+    flags = insights.anomaly_flags(df, PASS_MARK)
+    backlog_df, backlog_summary = insights.backlog_planner(df, PASS_MARK)
+    batches = insights.list_batches()
+
+    left_id = request.args.get("left") or (
+        batches[1]["id"] if len(batches) > 1 else "current"
+    )
+    right_id = request.args.get("right") or "current"
+
+    left_df = load_batch_frame(left_id)
+    right_df = load_batch_frame(right_id)
+    left_students = create_student_analysis(left_df) if left_df is not None else create_student_analysis(df)
+    right_students = create_student_analysis(right_df) if right_df is not None else student_df
+    left_stats = insights.batch_stats(
+        left_students,
+        0 if left_df is None else left_df["Subject Name"].nunique(),
+    )
+    right_stats = insights.batch_stats(
+        right_students,
+        0 if right_df is None else right_df["Subject Name"].nunique(),
+    )
+    comparison = insights.compare_student_sets(left_students, right_students)
+
+    return render_template(
+        "insights.html",
+        counseling=queue,
+        chains=pairs,
+        chain_chart=chain_chart,
+        anomalies=flags,
+        backlogs=backlog_df.head(80).to_dict(orient="records"),
+        backlog_summary=backlog_summary.to_dict(orient="records"),
+        backlog_total=len(backlog_df),
+        batches=batches,
+        left_id=left_id,
+        right_id=right_id,
+        left_stats=left_stats,
+        right_stats=right_stats,
+        comparison=comparison,
+        pass_mark=PASS_MARK,
+        selected_student="All",
+        selected_subject="All",
+        selected_result="All",
+    )
+
+
+@app.route("/download-backlog")
+def download_backlog():
+
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    df = load_data()
+
+    if df is None:
+        return redirect(url_for("index"))
+
+    backlog_df, summary_df = insights.backlog_planner(df, PASS_MARK)
+    output = BytesIO()
+
+    with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
+        backlog_df.to_excel(writer, sheet_name="Backlogs", index=False)
+        summary_df.to_excel(writer, sheet_name="By Subject", index=False)
+
+    output.seek(0)
+    return send_file(
+        output,
+        as_attachment=True,
+        download_name="supplementary_backlog_planner.xlsx",
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+
+
+@app.route("/student/<usn>/share", methods=["POST"])
+def share_student_card(usn):
+
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    df = load_data()
+
+    if df is None:
+        return redirect(url_for("index"))
+
+    usn = normalize_text(usn)
+    student_df = create_student_analysis(df)
+    student = student_df[student_df["USN"] == usn]
+
+    if student.empty:
+        return redirect(url_for("dashboard"))
+
+    student = student.iloc[0]
+    marks_df = df[df["USN"] == usn].copy()
+    marks_df["Status"] = marks_df["Marks"].apply(
+        lambda value: "PASS" if value >= PASS_MARK else "FAIL"
+    )
+
+    token = insights.save_share_card(
+        {
+            "name": student["Name"],
+            "usn": student["USN"],
+            "rank": int(student["Rank"]),
+            "total": float(student["Total"]),
+            "average": float(student["Average"]),
+            "percentage": float(student["Percentage"]),
+            "result": student["Result"],
+            "failed": int(student["Failed Subjects"]),
+            "passed": int(student["Passed Subjects"]),
+            "marks": marks_df.to_dict(orient="records"),
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "created_by": session.get("user"),
+        }
+    )
+    return redirect(url_for("report_card", token=token))
+
+
+@app.route("/card/<token>")
+def report_card(token):
+
+    card = insights.get_share_card(token)
+
+    if not card:
+        return render_template("report_card.html", missing=True), 404
+
+    public_url = request.url
+    return render_template(
+        "report_card.html",
+        missing=False,
+        card=card,
+        public_url=public_url,
+        qr_svg=insights.qr_svg(public_url),
+        pass_mark=PASS_MARK,
+    )
 
 @app.route("/logout")
 def logout():
