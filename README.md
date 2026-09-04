@@ -1,117 +1,142 @@
-
-
-.env
-
-.env.example
-
-.gitignore
-
-app.py
-
-auth_store.py
-
-insights.py
-
-README.md
-
-requirements.txt
-I want you to provide me  an Excel file which can challenge my features at a greater extent. So, go through my files and create a suitable Excel file of 200 students of Computer Science Engineering, where the USN starts from 2VD23CS001 to 2VD23CS200 and roll number starts from 0 to 200. I want to make the Excel file more fun by adding my friends' names. So, the friends' names are as follows: Piyoosha Tamburkar, Anusha Menasinkai, Priya Pavali, Pranjali S, Suraj Vibhuti, Vivek Pattankudi, Sagar Kushalapur, Tejas wajve, Samiksha Naikwad, Akshay Bulbule. These are my friends. I want them to be the top performers in the list of Excel file with good academic marks. I want you to add the Computer Science core subjects. The subject names should be DSA, DBMS, Computer Networks, Java Programming, Software Engineering and Project Management, and OS. These are the six subjects, and I want you to take the subject codes from the VTU portal 2022 scheme as per to the respective subjects names which I told you. Okay, now prepare a perfect Excel file for my project.
-
-…
-1:45 AM
-
-Worked for 7m 31s
-Created Student_Analytics_CSE_200.xlsx with 200 CSE students and 1,200 upload-ready result rows.
-
-All ten friends are the top ten performers.
-VTU 2022 course codes are included and documented in the workbook’s Course Reference tab, based on the official CSE scheme.
-It includes varied scores, 20 students with at least one failing subject, and realistic edge cases for stronger feature testing.
-Roll numbers run 0–199: that gives exactly 200 unique students; 0–200 would be 201 numbers.
-Student_Analytics_CSE_200.xlsx
-Spreadsheet · XLSX
-1:52 AM
-and also add me as top scorrer i forget to mention Samarth koti
-
-1:57 AM
-
-Worked for 2m 10s
-Updated Student_Analytics_CSE_200.xlsx.
-
-Samarth Koti is now the #1 scorer with 100 in all six subjects, assigned USN 2VD23CS011 and roll number 10. The file still contains exactly 200 students and 1,200 result records.
-
-Student_Analytics_CSE_200.xlsx
-Spreadsheet · XLSX
-1:59 AM
-provide me read me for my project so i can post it in my github account and also add the given excel sheet link in that read me so any user can access it
-
-2:05 AM
-
-Worked for 1m 56s
-Prepared a GitHub-ready package:
-
-README.md
-Sample Excel dataset
-Upload README.md to your repository root and keep the Excel file in sample-data/. The README’s download link will then work for every GitHub visitor. Replace <your-username> in the clone command with your GitHub username.
-
-Student_Analytics_CSE_200.xlsx
-Spreadsheet · XLSX
-
-Edited README.md
-+125
--0
-2:07 AM
-
-
-
-
-Outputs
-
-Sources
-
-.env
-
-.env.example
-
-.gitignore
-
-View all
-outputs/github_package/README.md
 # Student Analytics 2.0
 
-Student Analytics 2.0 is a Flask web application for turning student-result workbooks into clear academic insights. Upload an Excel file, map its columns if needed, and explore rankings, subject performance, pass/fail trends, student profiles, and downloadable reports.
+Student Analytics 2.0 is a Flask-based web application that converts student-result Excel files into meaningful academic insights. It helps faculty and academic coordinators analyze performance, identify students needing support, review subject-wise trends, and generate reports.
+
+## About the project
+
+Managing student marks manually through spreadsheets can be time-consuming and difficult to interpret. This project provides an interactive dashboard that processes uploaded Excel result files and presents the data through rankings, performance statistics, charts, subject analysis, and student profiles.
+
+The application is useful for departments, faculty members, and academic coordinators who want to make data-driven academic decisions.
 
 ## Sample dataset
 
 [Download the 200-student Computer Science Engineering sample workbook](sample-data/Student_Analytics_CSE_200.xlsx)
 
-The sample has 1,200 result records: 200 students, six Computer Science Engineering subjects, marks from 0 to 100, and a variety of performance patterns for testing the dashboard and Insights hub. It includes the required data columns plus an optional `Roll Number` column.
+The sample dataset contains:
+
+- 200 Computer Science Engineering students
+- 1,200 result records
+- Six core Computer Science subjects
+- Marks from 0 to 100
+- High performers, average performers, students with backlogs, and varied marks patterns
+- Samarth Koti as the highest scorer
+- Named friends as leading performers
+
+The dataset is designed to test rankings, pass/fail analysis, subject difficulty, counseling priorities, anomaly detection, and visual reports.
 
 ## Features
 
-- Staff login, account signup, and email OTP verification
-- Excel `.xlsx` uploads with a column-mapping screen for differently named input files
-- Student totals, averages, percentages, rankings, strongest subjects, and weakest subjects
-- Subject-wise averages, marks ranges, pass/fail counts, pass rate, and difficulty indicators
-- Interactive charts for performance distribution, marks distribution, subject comparisons, rankings, and pass/fail results
-- Individual student profiles with per-subject results
-- Downloads for detailed Excel reports, PDF reports, and backlog reports
-- Insights hub with counseling priorities, failure-chain analysis, anomaly checks, batch comparison, and shareable student cards
+- Staff login and account signup
+- Email OTP verification for registration
+- Excel `.xlsx` result upload
+- Column mapping for files with different header names
+- Student ranking and topper identification
+- Student performance analysis
+- Subject-wise performance analysis
+- Pass/fail statistics
+- Interactive Plotly charts
+- Individual student profiles
+- Downloadable Excel and PDF reports
+- Backlog reports
+- Counseling priority queue
+- Failure-chain analysis
+- Data anomaly detection
+- Batch comparison
+- Shareable student result cards
+
+## How it works
+
+1. A staff member logs in to the application.
+2. An Excel result file is uploaded.
+3. The application validates the file and maps columns when necessary.
+4. Student and subject-level metrics are calculated.
+5. The dashboard displays charts, rankings, performance summaries, and insights.
+6. Staff can download reports or review individual student profiles.
+
+## Analytics included
+
+### Student-level analysis
+
+For every student, the application calculates:
+
+- Total marks
+- Average marks
+- Percentage
+- Rank
+- Passed subjects
+- Failed subjects
+- Overall result
+- Strongest subject
+- Weakest subject
+
+### Subject-level analysis
+
+For every subject, the application calculates:
+
+- Average marks
+- Highest marks
+- Lowest marks
+- Number of passed students
+- Number of failed students
+- Pass percentage
+- Fail percentage
+- Difficulty score
+- Difficulty classification
+
+### Insights hub
+
+The Insights hub provides advanced academic analysis:
+
+- Counseling queue for at-risk students
+- Backlog summary by subject
+- Failure-chain analysis
+- Marks anomaly detection
+- Batch comparison
+- Student improvement and decline tracking
+- Shareable student report cards
 
 ## Required Excel columns
 
-The application requires these headers in the uploaded workbook:
+The uploaded Excel file must contain these columns:
 
 | Column | Description |
 | --- | --- |
 | `Name` | Student name |
 | `USN` | Unique student number |
-| `Subject Name` | Course or subject name |
-| `Subject Code` | Course code |
-| `Marks` | Numeric marks from 0 to 100 |
+| `Subject Name` | Name of the subject |
+| `Subject Code` | Subject code |
+| `Marks` | Numeric marks between 0 and 100 |
 
-Any extra column, such as `Roll Number`, is allowed and can be ignored during column mapping. The default pass mark in the application is 35.
+Additional columns such as `Roll Number` are allowed. The default pass mark in the application is 35.
 
-## Quick start
+## Sample dataset subjects
+
+| Subject | Subject Code | Official VTU Course Title |
+| --- | --- | --- |
+| DSA | BCS304 | Data Structures and Applications |
+| DBMS | BCS403 | Database Management Systems |
+| Computer Networks | BCS502 | Computer Networks |
+| Java Programming | BCS306A | Object Oriented Programming with Java |
+| Software Engineering and Project Management | BCS501 | Software Engineering & Project Management |
+| OS | BCS303 | Operating Systems |
+
+The course codes follow the [VTU 2022 Scheme for B.E. Computer Science and Engineering](https://vtu.ac.in/pdf/2022_3to8/38csesch.pdf).
+
+## Technology stack
+
+| Technology | Purpose |
+| --- | --- |
+| Python | Backend programming |
+| Flask | Web framework |
+| Pandas | Excel data processing |
+| Plotly | Interactive charts and visualizations |
+| Bootstrap | Responsive user interface |
+| OpenPyXL | Excel file handling |
+| XlsxWriter | Excel report generation |
+| ReportLab | PDF report generation |
+| QRCode | Shareable report-card QR codes |
+
+## Installation
 
 ### 1. Clone the repository
 
@@ -120,16 +145,18 @@ git clone https://github.com/<your-username>/Student-Analytics-2.0.git
 cd Student-Analytics-2.0
 ```
 
-### 2. Create and activate a virtual environment
+Replace `<your-username>` with your GitHub username.
 
-**Windows PowerShell**
+### 2. Create a virtual environment
+
+Windows PowerShell:
 
 ```powershell
 py -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
-**macOS/Linux**
+macOS/Linux:
 
 ```bash
 python3 -m venv .venv
@@ -142,21 +169,33 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 4. Configure email OTP (optional for local development)
+### 4. Configure email OTP
 
-Copy the example configuration and add valid SMTP details if you want OTP codes sent by email.
+Copy the example environment file:
 
-```bash
-cp .env.example .env
-```
-
-On Windows PowerShell:
+Windows PowerShell:
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-When SMTP is not configured, the application uses a local development fallback and shows the OTP in the application output.
+macOS/Linux:
+
+```bash
+cp .env.example .env
+```
+
+Update `.env` with your SMTP details if you want OTP verification emails to be sent.
+
+```env
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=yourgmail@gmail.com
+SMTP_PASSWORD=your-16-char-app-password
+SMTP_FROM=yourgmail@gmail.com
+```
+
+If SMTP is not configured, the application uses a local development fallback for OTP verification.
 
 ### 5. Run the application
 
@@ -164,7 +203,11 @@ When SMTP is not configured, the application uses a local development fallback a
 python app.py
 ```
 
-Open `http://127.0.0.1:5000` in your browser.
+Open the application in your browser:
+
+```text
+http://127.0.0.1:5000
+```
 
 ## Project structure
 
@@ -180,24 +223,20 @@ Student-Analytics-2.0/
 ├── static/
 ├── templates/
 ├── data/
+├── uploads/
 └── README.md
 ```
 
-## Sample data reference
-
-The sample workbook uses the following VTU 2022 Scheme course codes for Computer Science Engineering:
-
-| Project label | Subject code | Official VTU course title |
-| --- | --- | --- |
-| DSA | BCS304 | Data Structures and Applications |
-| DBMS | BCS403 | Database Management Systems |
-| Computer Networks | BCS502 | Computer Networks |
-| Java Programming | BCS306A | Object Oriented Programming with Java |
-| Software Engineering and Project Management | BCS501 | Software Engineering & Project Management |
-| OS | BCS303 | Operating Systems |
-
-Course codes are based on the [VTU 2022 Scheme for B.E. Computer Science and Engineering](https://vtu.ac.in/pdf/2022_3to8/38csesch.pdf).
-
 ## Security note
 
-Before deploying publicly, change the built-in staff credentials in `app.py`, use a strong Flask secret key, configure SMTP through environment variables, and keep `.env` out of version control.
+Before deploying the project publicly:
+
+- Change the built-in staff credentials in `app.py`
+- Use a strong Flask secret key
+- Configure SMTP credentials through environment variables
+- Never upload the `.env` file to GitHub
+- Keep user registration data private
+
+## Author
+
+Samarth Koti
