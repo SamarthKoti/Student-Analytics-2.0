@@ -1,117 +1,96 @@
-# 📊 Student Analytics 2.0
+# Student Analytics 2.0
 
-A web-based **Student Result Analysis System** built with **Flask, Pandas, Plotly, HTML, CSS, and Bootstrap**.
+Student Analytics 2.0 is a Flask web application for turning student-result workbooks into clear academic insights. Upload an Excel file, map its columns if needed, and explore rankings, subject performance, pass/fail trends, student profiles, and downloadable reports.
 
-The application transforms student result data from Excel into interactive academic insights, rankings, subject analysis, performance statistics, and visual dashboards.
+## Sample dataset
 
----
+[Download the 200-student Computer Science Engineering sample workbook](sample-data/Student_Analytics_CSE_200.xlsx)
 
-## 🚀 Features
+The sample has 1,200 result records: 200 students, six Computer Science Engineering subjects, marks from 0 to 100, and a variety of performance patterns for testing the dashboard and Insights hub. It includes the required data columns plus an optional `Roll Number` column.
 
-### 🔐 Secure Login
-- Multi-user staff login
-- Role-based user accounts
-- Session-based authentication
-- Logout functionality
+## Features
 
-### 📂 Excel Result Upload
-Upload student result data in `.xlsx` format and automatically process the records.
+- Staff login, account signup, and email OTP verification
+- Excel `.xlsx` uploads with a column-mapping screen for differently named input files
+- Student totals, averages, percentages, rankings, strongest subjects, and weakest subjects
+- Subject-wise averages, marks ranges, pass/fail counts, pass rate, and difficulty indicators
+- Interactive charts for performance distribution, marks distribution, subject comparisons, rankings, and pass/fail results
+- Individual student profiles with per-subject results
+- Downloads for detailed Excel reports, PDF reports, and backlog reports
+- Insights hub with counseling priorities, failure-chain analysis, anomaly checks, batch comparison, and shareable student cards
 
-### 📊 Dashboard Analytics
-The dashboard provides:
+## Required Excel columns
 
-- Total number of students
-- Total number of subjects
-- Average marks
-- Pass percentage
-- Topper information
-- Pass/Fail statistics
+The application requires these headers in the uploaded workbook:
 
-### 📚 Subject Analysis
-For every subject, the system calculates:
+| Column | Description |
+| --- | --- |
+| `Name` | Student name |
+| `USN` | Unique student number |
+| `Subject Name` | Course or subject name |
+| `Subject Code` | Course code |
+| `Marks` | Numeric marks from 0 to 100 |
 
-- Average marks
-- Highest marks
-- Lowest marks
-- Number of students passed
-- Number of students failed
-- Pass percentage
-- Fail percentage
-- Difficulty score
-- Difficulty classification
+Any extra column, such as `Roll Number`, is allowed and can be ignored during column mapping. The default pass mark in the application is 35.
 
-### 📈 Interactive Visualizations
+## Quick start
 
-The system uses Plotly to provide interactive charts:
+### 1. Clone the repository
 
-- **Student Performance Distribution**
-- **Average Marks by Subject**
-- **Subject Difficulty Analysis**
-- **Marks Distribution**
-- **Top 5 Student Ranking**
-- **Pass vs Fail Analysis**
+```bash
+git clone https://github.com/<your-username>/Student-Analytics-2.0.git
+cd Student-Analytics-2.0
+```
 
-Different chart types are used to make the analysis easier to understand instead of displaying only bar charts.
+### 2. Create and activate a virtual environment
 
-### 👨‍🎓 Student Analysis
+**Windows PowerShell**
 
-Individual student performance includes:
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
 
-- Total marks
-- Average marks
-- Percentage
-- Passed subjects
-- Failed subjects
-- Overall result
-- Strongest subject
-- Weakest subject
+**macOS/Linux**
 
-### 📥 Reports
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
 
-Generate downloadable reports containing:
+### 3. Install dependencies
 
-- Detailed student results
-- Student rankings
-- Subject analysis
-- Performance distribution
-- Dashboard summary
+```bash
+pip install -r requirements.txt
+```
 
----
+### 4. Configure email OTP (optional for local development)
 
-## 🛠️ Technologies Used
+Copy the example configuration and add valid SMTP details if you want OTP codes sent by email.
 
-| Technology | Purpose |
-|------------|---------|
-| Python | Backend programming |
-| Flask | Web application framework |
-| Pandas | Excel/data processing |
-| Plotly | Interactive visualizations |
-| Bootstrap | Responsive UI |
-| HTML | Web structure |
-| CSS | Styling |
-| ReportLab | PDF report generation |
-| XlsxWriter | Excel report generation |
+```bash
+cp .env.example .env
+```
 
----
+On Windows PowerShell:
 
-## 📁 Project Structure
+```powershell
+Copy-Item .env.example .env
+```
+
+When SMTP is not configured, the application uses a local development fallback and shows the OTP in the application output.
+
+### 5. Run the application
+
+```bash
+python app.py
+```
+
+Open `http://127.0.0.1:5000` in your browser.
+
+## Project structure
 
 ```text
 Student-Analytics-2.0/
-│
 ├── app.py
-├── requirements.txt
-│
-├── static/
-│   ├── logo.png
-│   └── style.css
-│
-├── templates/
-│   ├── index.html
-│   ├── login.html
-│   └── student_profile.html
-│
-├── uploads/
-│
-├── .gitignore
-└── README.md
+├── auth_store.py
