@@ -2,11 +2,9 @@ import json
 import os
 import random
 import re
-import smtplib
-import ssl
 from datetime import datetime, timezone
-from email.message import EmailMessage
 
+import resend
 from werkzeug.security import check_password_hash, generate_password_hash
 
 
@@ -42,7 +40,9 @@ def load_env_file():
             value = value.strip().strip('"').strip("'")
 
             if key:
-                os.environ[key] = value
+                # Values configured by Render (or another host) must take
+                # precedence over a local .env file.
+                os.environ.setdefault(key, value)
 
 
 load_env_file()
@@ -174,60 +174,56 @@ def _looks_like_placeholder(value):
     text = (value or "").strip().lower()
     return (
         (not text)
-        or ("yourgmail" in text)
-        or ("your-16-char" in text)
+        or ("your-resend" in text)
         or ("example.com" in text)
     )
 
 
-def smtp_configured():
-    host = _env("SMTP_HOST")
-    user = _env("SMTP_USER")
-    password = _env("SMTP_PASSWORD").replace(" ", "")
+def resend_configured():
+    api_key = _env("RESEND_API_KEY")
 
-    if _looks_like_placeholder(user) or _looks_like_placeholder(password):
+    if _looks_like_placeholder(api_key):
         return False
 
-    return bool(host and user and password)
+    return True
 
 
 def send_email_otp(email, code):
-    host = _env("SMTP_HOST", "smtp.gmail.com")
-    port = int(_env("SMTP_PORT", "587") or "587")
-    username = _env("SMTP_USER")
-    password = _env("SMTP_PASSWORD").replace(" ", "")
-    sender = _env("SMTP_FROM") or username
-
-    message = EmailMessage()
-    message["Subject"] = "Your StudentAnalytics signup code"
-    message["From"] = sender
-    message["To"] = email
-    message.set_content(
-        f"Your StudentAnalytics verification code is {code}.\n"
-        f"It expires in {OTP_TTL_SECONDS // 60} minutes.\n"
-        "If you did not request this, you can ignore this email."
+    """Send a signup OTP using Resend's HTTPS API."""
+    resend.api_key = _env("RESEND_API_KEY")
+    sender = (
+        _env("RESEND_FROM_EMAIL")
+        or _env("RESEND_FROM")
+        or "StudentAnalytics <onboarding@resend.dev>"
     )
 
-    context = ssl.create_default_context()
-
     try:
-        with smtplib.SMTP(host, port, timeout=20) as server:
-            server.starttls(context=context)
-            server.login(username, password)
-            server.send_message(message)
-    except smtplib.SMTPAuthenticationError as error:
+        resend.Emails.send(
+            {
+                "from": sender,
+                "to": [email],
+                "subject": "Your StudentAnalytics signup code",
+                "text": (
+                    f"Your StudentAnalytics verification code is {code}.\n"
+                    f"It expires in {OTP_TTL_SECONDS // 60} minutes.\n"
+                    "If you did not request this, you can ignore this email."
+                ),
+            }
+        )
+    except Exception as error:
         raise RuntimeError(
-            "Gmail login failed. Use a 16-character App Password, not your normal Gmail password."
+            "Resend could not send the verification code. Check RESEND_API_KEY "
+            "and that RESEND_FROM_EMAIL is a verified Resend sender."
         ) from error
 
 
 def deliver_otp(email, code):
     """
-    Send OTP by email when Gmail SMTP is configured.
+    Send OTP by email when Resend is configured.
     Otherwise keep a local/dev fallback so signup still works.
     """
 
-    if smtp_configured():
+    if resend_configured():
         send_email_otp(email, code)
         return "sent", None
 

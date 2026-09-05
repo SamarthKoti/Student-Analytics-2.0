@@ -259,7 +259,7 @@ def start_signup_otp(email):
         print(f"[StudentAnalytics OTP] send failed: {exc}")
         if isinstance(exc, RuntimeError) and str(exc).strip():
             return None, str(exc)
-        return None, "Could not send the verification code. Check your Gmail settings in .env."
+        return None, "Could not send the verification code. Check your Resend settings."
 
     session["signup"] = {
         "email": email,

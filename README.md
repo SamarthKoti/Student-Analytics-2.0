@@ -185,17 +185,20 @@ macOS/Linux:
 cp .env.example .env
 ```
 
-Update `.env` with your SMTP details if you want OTP verification emails to be sent.
+Update `.env` (and add the same values to Render's environment variables) to
+send OTP verification emails through Resend.
 
 ```env
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=yourgmail@gmail.com
-SMTP_PASSWORD=your-16-char-app-password
-SMTP_FROM=yourgmail@gmail.com
+RESEND_API_KEY=re_your_resend_api_key
+# Optional for Resend's test mode; required to email all users in production.
+RESEND_FROM_EMAIL=StudentAnalytics <noreply@yourdomain.com>
 ```
 
-If SMTP is not configured, the application uses a local development fallback for OTP verification.
+Without `RESEND_FROM_EMAIL`, the app uses Resend's onboarding sender. It can
+only email the address that owns the Resend account. To email all users,
+`RESEND_FROM_EMAIL` must use a domain verified in your Resend account. If
+Resend is not configured, the application uses a local development fallback
+for OTP verification.
 
 ### 5. Run the application
 
@@ -233,7 +236,7 @@ Before deploying the project publicly:
 
 - Change the built-in staff credentials in `app.py`
 - Use a strong Flask secret key
-- Configure SMTP credentials through environment variables
+- Configure Resend credentials through environment variables
 - Never upload the `.env` file to GitHub
 - Keep user registration data private
 
