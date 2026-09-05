@@ -239,6 +239,9 @@ Before deploying the project publicly:
 - Never upload the `.env` file to GitHub
 - Keep user registration data private
 
+
+## 🔗 **Live Project:** [View Student Analytics 2.0](https://student-analytics-2-0.onrender.com)
+
 ## Author
 
 Samarth Koti
