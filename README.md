@@ -186,19 +186,18 @@ cp .env.example .env
 ```
 
 Update `.env` (and add the same values to Render's environment variables) to
-send OTP verification emails through Resend.
+send OTP verification emails through Brevo.
 
 ```env
-RESEND_API_KEY=re_your_resend_api_key
-# Optional for Resend's test mode; required to email all users in production.
-RESEND_FROM_EMAIL=StudentAnalytics <noreply@yourdomain.com>
+BREVO_API_KEY=xkeysib-your-brevo-api-key
+BREVO_FROM_EMAIL=yourgmail@gmail.com
+BREVO_FROM_NAME=StudentAnalytics
 ```
 
-Without `RESEND_FROM_EMAIL`, the app uses Resend's onboarding sender. It can
-only email the address that owns the Resend account. To email all users,
-`RESEND_FROM_EMAIL` must use a domain verified in your Resend account. If
-Resend is not configured, the application uses a local development fallback
-for OTP verification.
+In Brevo, add `BREVO_FROM_EMAIL` as a Sender and enter the verification code
+sent to that inbox before deploying. The free plan is suitable for low-volume
+project OTPs. If Brevo is not configured, the application uses a local
+development fallback for OTP verification.
 
 ### 5. Run the application
 
@@ -236,7 +235,7 @@ Before deploying the project publicly:
 
 - Change the built-in staff credentials in `app.py`
 - Use a strong Flask secret key
-- Configure Resend credentials through environment variables
+- Configure Brevo credentials through environment variables
 - Never upload the `.env` file to GitHub
 - Keep user registration data private
 

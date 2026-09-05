@@ -6,4 +6,3 @@ XlsxWriter==3.2.5
 reportlab==4.4.3
 qrcode==8.0
 gunicorn
-resend

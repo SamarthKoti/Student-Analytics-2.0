@@ -1,10 +1,12 @@
 import json
+import json
 import os
 import random
 import re
 from datetime import datetime, timezone
+from urllib import error as urlerror
+from urllib import request as urlrequest
 
-import resend
 from werkzeug.security import check_password_hash, generate_password_hash
 
 
@@ -14,6 +16,7 @@ USERS_FILE = os.path.join(DATA_DIR, "registered_users.json")
 OTP_TTL_SECONDS = 300
 OTP_MAX_ATTEMPTS = 5
 MIN_PASSWORD_LENGTH = 8
+BREVO_EMAIL_API_URL = "https://api.brevo.com/v3/smtp/email"
 
 EMAIL_PATTERN = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 USERNAME_PATTERN = re.compile(r"^[A-Za-z0-9_]{3,32}$")
@@ -174,56 +177,87 @@ def _looks_like_placeholder(value):
     text = (value or "").strip().lower()
     return (
         (not text)
-        or ("your-resend" in text)
+        or ("your-" in text)
         or ("example.com" in text)
     )
 
 
-def resend_configured():
-    api_key = _env("RESEND_API_KEY")
+def brevo_configured():
+    api_key = _env("BREVO_API_KEY")
+    sender = _env("BREVO_FROM_EMAIL")
 
-    if _looks_like_placeholder(api_key):
+    if _looks_like_placeholder(api_key) or _looks_like_placeholder(sender):
         return False
 
     return True
 
 
+def _brevo_error_message(error):
+    """Extract Brevo's safe, human-readable error message."""
+    try:
+        payload = json.loads(error.read().decode("utf-8"))
+        return payload.get("message") or payload.get("code") or "Request rejected by Brevo."
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, AttributeError):
+        return "Request rejected by Brevo."
+
+
 def send_email_otp(email, code):
-    """Send a signup OTP using Resend's HTTPS API."""
-    resend.api_key = _env("RESEND_API_KEY")
-    sender = (
-        _env("RESEND_FROM_EMAIL")
-        or _env("RESEND_FROM")
-        or "StudentAnalytics <onboarding@resend.dev>"
+    """Send a signup OTP with Brevo's HTTPS transactional-email API."""
+    api_key = _env("BREVO_API_KEY")
+    sender_email = _env("BREVO_FROM_EMAIL")
+    sender_name = _env("BREVO_FROM_NAME", "StudentAnalytics")
+
+    payload = {
+        "sender": {"name": sender_name, "email": sender_email},
+        "to": [{"email": email}],
+        "subject": "Your StudentAnalytics signup code",
+        "textContent": (
+            f"Your StudentAnalytics verification code is {code}.\n"
+            f"It expires in {OTP_TTL_SECONDS // 60} minutes.\n"
+            "If you did not request this, you can ignore this email."
+        ),
+        "tags": ["signup-otp"],
+    }
+    request = urlrequest.Request(
+        BREVO_EMAIL_API_URL,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "accept": "application/json",
+            "api-key": api_key,
+            "content-type": "application/json",
+        },
+        method="POST",
     )
 
     try:
-        resend.Emails.send(
-            {
-                "from": sender,
-                "to": [email],
-                "subject": "Your StudentAnalytics signup code",
-                "text": (
-                    f"Your StudentAnalytics verification code is {code}.\n"
-                    f"It expires in {OTP_TTL_SECONDS // 60} minutes.\n"
-                    "If you did not request this, you can ignore this email."
-                ),
-            }
-        )
+        with urlrequest.urlopen(request, timeout=20) as response:
+            if response.status not in (200, 201, 202):
+                raise RuntimeError("Brevo did not accept the verification email.")
+    except urlerror.HTTPError as error:
+        detail = _brevo_error_message(error)
+        if error.code in (401, 403):
+            raise RuntimeError(
+                "Brevo rejected the API key or sender email. Confirm BREVO_API_KEY "
+                "and verify BREVO_FROM_EMAIL in your Brevo account."
+            ) from error
+        raise RuntimeError(f"Brevo could not send the verification code: {detail}") from error
+    except urlerror.URLError as error:
+        raise RuntimeError(
+            "Could not connect to Brevo. Please try again shortly."
+        ) from error
     except Exception as error:
         raise RuntimeError(
-            "Resend could not send the verification code. Check RESEND_API_KEY "
-            "and that RESEND_FROM_EMAIL is a verified Resend sender."
+            "Could not send the verification code through Brevo."
         ) from error
 
 
 def deliver_otp(email, code):
     """
-    Send OTP by email when Resend is configured.
+    Send OTP by email when Brevo is configured.
     Otherwise keep a local/dev fallback so signup still works.
     """
 
-    if resend_configured():
+    if brevo_configured():
         send_email_otp(email, code)
         return "sent", None
 
