@@ -241,7 +241,7 @@ Before deploying the project publicly:
 
 
 ## 🔗Live Project
-    Link:https://student-analytics-2-0.onrender.com)
+    Link:https://student-analytics-2-0.onrender.com
 
 ## Author
 
